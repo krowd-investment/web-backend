@@ -1,0 +1,27 @@
+- Generate a key pair:
+
+keytool -genkeypair -alias local_ssl -keyalg RSA -keysize 2048 -storetype PKCS12^
+
+More?  -keystore local-ssl.p12 -validity 365 -ext san=dns:localhost
+
+
+- Enable HTTPS in spring app config file
+
+server:
+  port: <port>
+  ssl:
+    enabled: true
+    key-alias: local_ssl
+    key-store: classpath:local-ssl.p12
+    key-store-type: PKCS12
+    key-password: <keystore password>
+    key-store-password: <keystore password>
+
+
+- Export certificate:
+
+keytool -export -keystore local-ssl.p12 -alias local_ssl -file local-cert.crt
+
+- Install self-signed certificate to Trusted Root Certification Authorities
+
+

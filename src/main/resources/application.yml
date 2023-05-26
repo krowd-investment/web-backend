@@ -29,3 +29,10 @@ springdoc:
 
 server:
   port: 8080
+  ssl:
+    enabled: true
+    key-alias: local_ssl
+    key-store: classpath:local-ssl.p12
+    key-store-type: PKCS12
+    key-password: 16022002
+    key-store-password: 16022002

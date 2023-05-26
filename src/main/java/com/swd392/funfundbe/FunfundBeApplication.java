@@ -24,7 +24,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 				version = "1.0"
 		),
 		servers = {
-			@Server(url = "http://localhost:8080", description = "Local development server domain")
+			@Server(url = "http://localhost:8080", description = "Local development server domain"),
+			@Server(url = "https://localhost:8080", description = "Local development server domain with SSL/TLS")
 		},
 		security = {
 				@SecurityRequirement(name = "token_auth")
