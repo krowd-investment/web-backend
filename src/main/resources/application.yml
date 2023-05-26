@@ -1,0 +1,31 @@
+---
+spring:
+  profiles:
+    active: default
+    include: dev
+
+---
+#spring:
+#  profiles:
+#    active: aws
+#    include: aws
+
+---
+spring:
+  config:
+    import: env.yml
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        show_sql: true
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+
+springdoc:
+  swagger-ui:
+    path: /funfund.html
+
+server:
+  port: 8080
