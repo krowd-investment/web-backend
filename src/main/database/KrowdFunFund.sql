@@ -8,7 +8,7 @@ create table Roletbl(
     Primary key(role_id)
 )
 create table [Usertbl](
-    [user_id] int ,
+    [user_id] int Identity(1, 1),
     role_id varchar(20) not null,
     full_name nvarchar(200),
     email varchar(200),
@@ -18,14 +18,25 @@ create table [Usertbl](
     gender varchar(10),
     birthdate datetime,
     tax_indentification varchar(20),
-    [address] varchar(200),
+    [address] nvarchar(200),
     bank_name nvarchar(50),
     bank_account nvarchar(20),
+    momo varchar(20),
     created_at datetime not null,
-    [status] bit not null,
+    [status] varchar(50) not null,
     [enabled] bit not null,
     Primary key([user_id]),
     Foreign key(role_id) references RoleTbl(role_id)
+)
+create table Investor (
+    [user_id] int,
+    Primary key([user_id]),
+    Foreign key(user_id) references [Usertbl](user_id)
+)
+create table ProjectOwner (
+    [user_id] int,
+    Primary key([user_id]),
+    Foreign key(user_id) references [Usertbl](user_id)
 )
 create table WalletType(
     wallet_type_id varchar(100),
@@ -45,7 +56,7 @@ create table PersonalWallet(
     Foreign key(wallet_type_id) references WalletType(wallet_type_id)
 )
 create table PersonalWalletTransaction(
-    personal_wallet_transaction_id int,
+    personal_wallet_transaction_id int Identity(1, 1),
     from_wallet_id uniqueidentifier  ,
     to_wallet_id uniqueidentifier,
     created_by int,
@@ -59,7 +70,7 @@ create table PersonalWalletTransaction(
     Foreign Key(created_by) references [Usertbl]([user_id])
 )
 create table Area(
-    area_id int,
+    area_id int Identity(1, 1),
     city nvarchar(100),
     district nvarchar(100),
     details nvarchar(1000) ,
@@ -67,21 +78,21 @@ create table Area(
     Primary Key(area_id)
 )
 create table Field(
-    field_id int,
+    field_id int Identity(1, 1),
     [name] nvarchar(100),
     [field_description] text,
     [status] bit not null default 1,
     primary key(field_id)
 )
 create table RiskType(
-    risk_type_id int,
+    risk_type_id int Identity(1, 1),
     [name] nvarchar(200),
     [risk_type_description] nvarchar(1000),
     [status] bit not null default 1
     Primary Key(risk_type_id)
 )
 create table Project(
-    project_id int ,
+    project_id int Identity(1, 1),
     created_by int not null,
     created_at datetime not null,
     field_id int not null,
@@ -112,7 +123,7 @@ create table Project(
     Foreign key(field_id) references Field(field_id)
 )
 create table Risk(
-    risk_id int,
+    risk_id int Identity(1, 1),
     risk_type_id int not null,
     project_id int not null,
     [name] nvarchar(200),
@@ -135,7 +146,7 @@ create table Investment(
     Foreign key(project_id) references Project(project_id)
 )
 create table Stage(
-    stage_id int,
+    stage_id int Identity(1, 1),
     project_id int not null,
     [name] nvarchar(50),
     [description] text,
@@ -147,7 +158,7 @@ create table Stage(
     foreign key(project_id) references Project(project_id)
 )
 create table MonthlyReport(
-    monthly_report_id int,
+    monthly_report_id int Identity(1, 1),
     stage_id int not null,
     revenue decimal not null,
     created_by int not null,
@@ -184,7 +195,7 @@ create table ProjectWallet(
     Foreign key(project_id) references  Project(project_id)
 )
 create table InvestmentTransaction(
-    investment_transaction_id int,
+    investment_transaction_id int Identity(1, 1),
     personal_wallet_id uniqueidentifier not null,
     project_wallet_id uniqueidentifier not null,
     investment_id uniqueidentifier,
@@ -199,7 +210,7 @@ create table InvestmentTransaction(
     Foreign key(project_wallet_id) references ProjectWallet(project_wallet_id)
 )
 create table PeriodRevenue(
-    period_revenue_id int,
+    period_revenue_id int Identity(1, 1),
     stage_id int not null,
     actual_amount decimal not null,
     shared_amount decimal not null,
@@ -220,7 +231,7 @@ create table PeriodRevenue(
     Foreign key(updated_by) references [Usertbl]([user_id])
 )
 create table Payment(
-    payment_id int,
+    payment_id int Identity(1, 1),
     period_revenue_id int not null,
     investment_id uniqueidentifier not null,
     amount decimal not null,
@@ -233,7 +244,7 @@ create table Payment(
 )
 
 create table ServiceWalletTransaction(
-    service_wallet_transaction_id int,
+    service_wallet_transaction_id int Identity(1, 1),
     service_wallet_id uniqueidentifier not null,
     created_by int not null,
     created_at datetime not null,
