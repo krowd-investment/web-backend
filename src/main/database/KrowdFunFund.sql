@@ -1,6 +1,31 @@
+Drop database if exists KrowdFunFund
+go
 Create database KrowdFunFund
 go
 Use KrowdFunFund;
+go
+drop table if exists ServiceWalletTransaction
+drop table if exists Payment
+drop table if exists PeriodRevenue
+drop table if exists InvestmentTransaction
+drop table if exists ProjectWallet
+drop table if exists ServiceWallet
+drop table if exists MonthlyReport
+drop table if exists Stage
+drop table if exists Investment
+drop table if exists Risk
+drop table if exists Project
+drop table if exists RiskType
+drop table if exists Field
+drop table if exists Area
+drop table if exists PersonalWalletTransaction
+drop table if exists PersonalWallet
+drop table if exists WalletType
+drop table if exists ProjectOwner
+drop table if exists Investor
+drop table if exists [Usertbl]
+drop table if exists Roletbl
+
 create table Roletbl(
     role_id varchar(20),
     role_name varchar(100),
