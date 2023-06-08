@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.swd392.funfundbe.model.entity.UserTbl;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<UserTbl, Integer> {
-
+    Optional<UserTbl> findByEmail(String email);
 }

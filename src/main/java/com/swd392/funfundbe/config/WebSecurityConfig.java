@@ -24,7 +24,7 @@ public class WebSecurityConfig {
 
     private final String[] AUTH_WHITE_LIST = {
             "/swagger-ui/**", "/v3/api-docs/**", "/funfund.html",
-            "/api/v1/welcome"
+            "/api/v1/welcome", "/api/login/google"
     };
 
     @Bean
@@ -59,7 +59,7 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITE_LIST).permitAll()
-                        .anyRequest().authenticated()
+//                        .anyRequest().authenticated()
                 );
         return http.build();
     }

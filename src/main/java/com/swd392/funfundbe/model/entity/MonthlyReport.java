@@ -24,7 +24,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MonthlyReport {
     @Id
-    @Column(name = "month_report_id")
+    @Column(name = "monthly_report_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int monthlyReportId;
     private BigDecimal revenue;

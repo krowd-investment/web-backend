@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Field")
+@Table(name = "PersonalWalletTransaction")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -39,10 +39,10 @@ public class PersonalWalletTransaction {
     @ManyToOne
     @JoinColumn(name = "created_by", referencedColumnName = "user_id")
     private UserTbl pWTransactionrcreatedBy;
-    @Column(name = "create_at")
+    @Column(name = "created_at")
     private Date createdAt;
     private BigDecimal amount;
     private BigDecimal fee;
-    @Column(name = "personal_wallet_transaction_Description")
+    @Column(name = "personal_wallet_description")
     private String personalWalletDescription;
 }

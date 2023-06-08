@@ -3,16 +3,8 @@ package com.swd392.funfundbe.model.entity;
 import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import com.swd392.funfundbe.model.enums.LoginStatus;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,9 +38,10 @@ public class UserTbl {
     private String bankName;
     private String bank_account;
     private String momo;
-    @Column(name = "create_at")
+    @Column(name = "created_at")
     private Date createdAt;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private LoginStatus status;
     private boolean enabled;
 
     @OneToOne(mappedBy = "investor", cascade = CascadeType.ALL)

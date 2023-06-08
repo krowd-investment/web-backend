@@ -31,7 +31,7 @@ public class ServiceWalletTransaction {
     private Date createdAt;
     @Column(name = "amount")
     private BigDecimal amount;
-    @Column(name = "service_wallet_description")
+    @Column(name = "description")
     private String serviceWalletDescription;
     @ManyToOne
     @JoinColumn(name = "service_wallet_id", referencedColumnName = "service_wallet_id")

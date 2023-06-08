@@ -42,7 +42,7 @@ create table [Usertbl](
     id_card varchar(20),
     gender varchar(10),
     birthdate datetime,
-    tax_indentification varchar(20),
+    tax_identification varchar(20),
     [address] nvarchar(200),
     bank_name nvarchar(50),
     bank_account nvarchar(20),
@@ -279,6 +279,12 @@ create table ServiceWalletTransaction(
     Foreign key(service_wallet_id) references ServiceWallet(service_wallet_id),
     Foreign key(created_by) references [Usertbl]([user_id]),
 )
+
+insert into [Roletbl] (role_id, role_name, description)
+values
+('ADMIN', 'Admin', ''),
+('INVESTOR', 'Investor', ''),
+('PO', 'Project Owner', '')
 
 
 

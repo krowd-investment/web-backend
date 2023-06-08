@@ -38,7 +38,7 @@ public class PersonalWallet {
     private WalletType walletType;
     @Column(name = "balance")
     private BigDecimal balance;
-    @Column(name = "create_at")
+    @Column(name = "created_at")
     private Date createdAt;
     @OneToMany(mappedBy = "fromWallet", cascade = CascadeType.ALL)
     private List<PersonalWalletTransaction> fromWalletTransactionList;
