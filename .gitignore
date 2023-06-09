@@ -34,3 +34,4 @@ build/
 
 ### ENV file ###
 src/main/resources/env.yml
+src/main/resources/credentials.envfile

@@ -21,7 +21,7 @@ public class UserTbl {
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private RoleTbl role;
     private String full_name;

@@ -2,6 +2,7 @@ package com.swd392.funfundbe.security;
 
 import com.swd392.funfundbe.model.entity.UserTbl;
 import com.swd392.funfundbe.model.enums.LoginStatus;
+import com.swd392.funfundbe.model.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,7 +28,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return user.getRole().getRoleId().equals(Role.INVESTOR.toString()) ? user.getPhone() : user.getEmail();
     }
 
     @Override

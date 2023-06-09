@@ -48,13 +48,13 @@ public class JwtTokenProvider {
         refreshJwtParser = Jwts.parserBuilder().setSigningKey(refreshKey).build();
     }
 
-    public String getAccessToken(String email, String role) {
+    public String getAccessToken(String username, String role) {
         Date now = new Date();
         Date expireTime = new Date(now.getTime() + accessExpireTimeInMinutes * 60 * 1000);
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
         return accessJwtBuidler
-                .setSubject(email)
+                .setSubject(username)
                 .addClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expireTime)
@@ -62,23 +62,23 @@ public class JwtTokenProvider {
     }
 
     public String generateAccessToken(Authentication authentication) {
-        String email = authentication.getName();
-        String role = userService.getUserByEmail(email).getRole().getRoleId();
-        return getAccessToken(email, role);
+        String username = authentication.getName();
+        String role = userService.getUserByEmailOrPhone(username).getRole().getRoleId();
+        return getAccessToken(username, role);
     }
 
     public String generateAccessToken(String refreshToken) {
         Claims refreshClaims = refreshJwtParser.parseClaimsJws(refreshToken).getBody();
-        String email = refreshClaims.getSubject();
-        String role = userService.getUserByEmail(email).getRole().getRoleId();
-        return getAccessToken(email, role);
+        String username = refreshClaims.getSubject();
+        String role = userService.getUserByEmailOrPhone(username).getRole().getRoleId();
+        return getAccessToken(username, role);
     }
 
-    public String generateRefreshToken(String email) {
+    public String generateRefreshToken(String username) {
         Date now = new Date();
         Date expireTime = new Date(now.getTime() + refreshExpireTimeInMinutes * 60 * 1000);
         return refreshJwtBuidler
-                .setSubject(email)
+                .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(expireTime)
                 .compact();
@@ -129,7 +129,5 @@ public class JwtTokenProvider {
         }
         return false;
     }
-
-
 
 }

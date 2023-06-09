@@ -24,7 +24,7 @@ public class WebSecurityConfig {
 
     private final String[] AUTH_WHITE_LIST = {
             "/swagger-ui/**", "/v3/api-docs/**", "/funfund.html",
-            "/api/v1/welcome", "/api/login/google"
+            "/api/v1/welcome", "/api/login/**"
     };
 
     @Bean

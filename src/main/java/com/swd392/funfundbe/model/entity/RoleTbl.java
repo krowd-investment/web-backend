@@ -1,13 +1,9 @@
 package com.swd392.funfundbe.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "Roletbl")
@@ -23,4 +19,9 @@ public class RoleTbl {
     private String roleName;
     @Column(name ="description")
     private String description;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<UserTbl> users;
 }
