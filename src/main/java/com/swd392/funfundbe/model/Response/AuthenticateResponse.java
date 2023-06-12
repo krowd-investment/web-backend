@@ -7,9 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginResponse {
-//    private String accessToken;
-//    private String refreshToken;
-//    private Integer userId;
-//    private String status;
+public class AuthenticateResponse {
+    private Integer userId;
+    private String status;
+    private boolean enabled;
 }

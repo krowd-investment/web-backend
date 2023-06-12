@@ -28,16 +28,14 @@ springdoc:
   swagger-ui:
     path: /funfund.html
 
-google:
-  client-id: ${DEV_GOOGLE_CLIENT_ID}
+#google:
+#  client-id: ${DEV_GOOGLE_CLIENT_ID}
 
-jwt:
-  access-secret-key: ${JWT_ACCESS_SECRET_KEY}
-  refresh-secret-key: ${JWT_REFRESH_SECRET_KEY}
-  access-expire-time-in-minutes: 30
-  refresh-expire-time-in-minutes: 1440
+#jwt:
+#  access-secret-key: ${JWT_ACCESS_SECRET_KEY}
+#  refresh-secret-key: ${JWT_REFRESH_SECRET_KEY}
+#  access-expire-time-in-minutes: 30
+#  refresh-expire-time-in-minutes: 1440
 
 server:
   port: 8080
-  servlet:
-    application-display-name:

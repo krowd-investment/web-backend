@@ -22,112 +22,112 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtTokenProvider {
-    @Value("${jwt.access-secret-key}")
-    private String accessSecretKey;
-    @Value("${jwt.refresh-secret-key}")
-    private String refreshSecretKey;
-    @Value("${jwt.access-expire-time-in-minutes}")
-    private Long accessExpireTimeInMinutes;
-    @Value("${jwt.refresh-expire-time-in-minutes}")
-    private Long refreshExpireTimeInMinutes;
-    private JwtBuilder accessJwtBuidler;
-    private JwtParser accessJwtParser;
-    private JwtBuilder refreshJwtBuidler;
-    private JwtParser refreshJwtParser;
-
-    private final UserDetailsServiceImpl userDetailsServiceImpl;
-    private final UserService userService;
-
-    @PostConstruct
-    public void postConstruct() {
-        SecretKey accessKey = Keys.hmacShaKeyFor(accessSecretKey.getBytes(StandardCharsets.UTF_16));
-        SecretKey refreshKey = Keys.hmacShaKeyFor(refreshSecretKey.getBytes(StandardCharsets.UTF_16));
-        accessJwtBuidler = Jwts.builder().signWith(accessKey);
-        accessJwtParser = Jwts.parserBuilder().setSigningKey(accessKey).build();
-        refreshJwtBuidler = Jwts.builder().signWith(refreshKey);
-        refreshJwtParser = Jwts.parserBuilder().setSigningKey(refreshKey).build();
-    }
-
-    public String getAccessToken(String username, String role) {
-        Date now = new Date();
-        Date expireTime = new Date(now.getTime() + accessExpireTimeInMinutes * 60 * 1000);
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("role", role);
-        return accessJwtBuidler
-                .setSubject(username)
-                .addClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(expireTime)
-                .compact();
-    }
-
-    public String generateAccessToken(Authentication authentication) {
-        String username = authentication.getName();
-        String role = userService.getUserByEmailOrPhone(username).getRole().getRoleId();
-        return getAccessToken(username, role);
-    }
-
-    public String generateAccessToken(String refreshToken) {
-        Claims refreshClaims = refreshJwtParser.parseClaimsJws(refreshToken).getBody();
-        String username = refreshClaims.getSubject();
-        String role = userService.getUserByEmailOrPhone(username).getRole().getRoleId();
-        return getAccessToken(username, role);
-    }
-
-    public String generateRefreshToken(String username) {
-        Date now = new Date();
-        Date expireTime = new Date(now.getTime() + refreshExpireTimeInMinutes * 60 * 1000);
-        return refreshJwtBuidler
-                .setSubject(username)
-                .setIssuedAt(now)
-                .setExpiration(expireTime)
-                .compact();
-    }
-
-    public boolean validateAccessToken(String accessToken) {
-        try {
-            accessJwtParser.parseClaimsJws(accessToken);
-            return true;
-        }
-        catch (MalformedJwtException e) {
-            log.warn("Invalid JWT token");
-        }
-        catch (ExpiredJwtException e) {
-            log.warn("Expired JWT token");
-        }
-        catch (UnsupportedJwtException e) {
-            log.warn("Unsupported JWT token");
-        }
-        catch (SignatureException e) {
-            log.warn("JWT signature validation fails");
-        }
-        catch (IllegalArgumentException e) {
-            log.warn("JWT claims string is empty.");
-        }
-        return false;
-    }
-
-    public boolean validateRefreshToken(String refreshToken) {
-        try {
-            refreshJwtParser.parseClaimsJws(refreshToken);
-            return true;
-        }
-        catch (MalformedJwtException e) {
-            log.warn("Invalid JWT token");
-        }
-        catch (ExpiredJwtException e) {
-            log.warn("Expired JWT token");
-        }
-        catch (UnsupportedJwtException e) {
-            log.warn("Unsupported JWT token");
-        }
-        catch (SignatureException e) {
-            log.warn("JWT signature validation fails");
-        }
-        catch (IllegalArgumentException e) {
-            log.warn("JWT claims string is empty.");
-        }
-        return false;
-    }
+//    @Value("${jwt.access-secret-key}")
+//    private String accessSecretKey;
+//    @Value("${jwt.refresh-secret-key}")
+//    private String refreshSecretKey;
+//    @Value("${jwt.access-expire-time-in-minutes}")
+//    private Long accessExpireTimeInMinutes;
+//    @Value("${jwt.refresh-expire-time-in-minutes}")
+//    private Long refreshExpireTimeInMinutes;
+//    private JwtBuilder accessJwtBuidler;
+//    private JwtParser accessJwtParser;
+//    private JwtBuilder refreshJwtBuidler;
+//    private JwtParser refreshJwtParser;
+//
+//    private final UserDetailsServiceImpl userDetailsServiceImpl;
+//    private final UserService userService;
+//
+//    @PostConstruct
+//    public void postConstruct() {
+//        SecretKey accessKey = Keys.hmacShaKeyFor(accessSecretKey.getBytes(StandardCharsets.UTF_16));
+//        SecretKey refreshKey = Keys.hmacShaKeyFor(refreshSecretKey.getBytes(StandardCharsets.UTF_16));
+//        accessJwtBuidler = Jwts.builder().signWith(accessKey);
+//        accessJwtParser = Jwts.parserBuilder().setSigningKey(accessKey).build();
+//        refreshJwtBuidler = Jwts.builder().signWith(refreshKey);
+//        refreshJwtParser = Jwts.parserBuilder().setSigningKey(refreshKey).build();
+//    }
+//
+//    public String getAccessToken(String username, String role) {
+//        Date now = new Date();
+//        Date expireTime = new Date(now.getTime() + accessExpireTimeInMinutes * 60 * 1000);
+//        Map<String, Object> claims = new HashMap<>();
+//        claims.put("role", role);
+//        return accessJwtBuidler
+//                .setSubject(username)
+//                .addClaims(claims)
+//                .setIssuedAt(now)
+//                .setExpiration(expireTime)
+//                .compact();
+//    }
+//
+//    public String generateAccessToken(Authentication authentication) {
+//        String username = authentication.getName();
+//        String role = userService.getUserByEmailOrPhone(username).getRole().getRoleId();
+//        return getAccessToken(username, role);
+//    }
+//
+//    public String generateAccessToken(String refreshToken) {
+//        Claims refreshClaims = refreshJwtParser.parseClaimsJws(refreshToken).getBody();
+//        String username = refreshClaims.getSubject();
+//        String role = userService.getUserByEmailOrPhone(username).getRole().getRoleId();
+//        return getAccessToken(username, role);
+//    }
+//
+//    public String generateRefreshToken(String username) {
+//        Date now = new Date();
+//        Date expireTime = new Date(now.getTime() + refreshExpireTimeInMinutes * 60 * 1000);
+//        return refreshJwtBuidler
+//                .setSubject(username)
+//                .setIssuedAt(now)
+//                .setExpiration(expireTime)
+//                .compact();
+//    }
+//
+//    public boolean validateAccessToken(String accessToken) {
+//        try {
+//            accessJwtParser.parseClaimsJws(accessToken);
+//            return true;
+//        }
+//        catch (MalformedJwtException e) {
+//            log.warn("Invalid JWT token");
+//        }
+//        catch (ExpiredJwtException e) {
+//            log.warn("Expired JWT token");
+//        }
+//        catch (UnsupportedJwtException e) {
+//            log.warn("Unsupported JWT token");
+//        }
+//        catch (SignatureException e) {
+//            log.warn("JWT signature validation fails");
+//        }
+//        catch (IllegalArgumentException e) {
+//            log.warn("JWT claims string is empty.");
+//        }
+//        return false;
+//    }
+//
+//    public boolean validateRefreshToken(String refreshToken) {
+//        try {
+//            refreshJwtParser.parseClaimsJws(refreshToken);
+//            return true;
+//        }
+//        catch (MalformedJwtException e) {
+//            log.warn("Invalid JWT token");
+//        }
+//        catch (ExpiredJwtException e) {
+//            log.warn("Expired JWT token");
+//        }
+//        catch (UnsupportedJwtException e) {
+//            log.warn("Unsupported JWT token");
+//        }
+//        catch (SignatureException e) {
+//            log.warn("JWT signature validation fails");
+//        }
+//        catch (IllegalArgumentException e) {
+//            log.warn("JWT claims string is empty.");
+//        }
+//        return false;
+//    }
 
 }

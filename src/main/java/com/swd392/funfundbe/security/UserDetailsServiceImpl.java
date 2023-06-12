@@ -2,6 +2,7 @@ package com.swd392.funfundbe.security;
 
 import com.swd392.funfundbe.model.entity.UserTbl;
 import com.swd392.funfundbe.repository.UserRepository;
+import com.swd392.funfundbe.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,12 +20,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
+    private final UserService userService;
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserTbl user = userRepository.findByEmailOrPhone(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Email not found"));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserTbl user = userService.getUserByEmail(email);
         Collection<? extends GrantedAuthority> authorities =
                 List.of(new SimpleGrantedAuthority(user.getRole().getRoleId()));
         return new UserDetailsImpl(user, authorities);
     }
+
+
 }

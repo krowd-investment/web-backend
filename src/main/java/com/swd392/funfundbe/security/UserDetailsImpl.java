@@ -28,7 +28,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getRole().getRoleId().equals(Role.INVESTOR.toString()) ? user.getPhone() : user.getEmail();
+        return user.getEmail();
     }
 
     @Override
