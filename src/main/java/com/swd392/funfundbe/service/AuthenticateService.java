@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AuthenticateService {
 
-    private static UserTbl getCurrentUserFromSecurityContext() {
+    public static UserTbl getCurrentUserFromSecurityContext() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
