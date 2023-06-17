@@ -289,7 +289,4 @@ values
 insert into [Usertbl] (role_id, email, phone, created_at, status, enabled)
 values ('ADMIN', 'viettien1602@gmail.com', '0123456789', getdate(), 'APPROVED', 1)
 
- Alter table Project 
- Add project_name varchar(255)
- Alter table Project 
- Add brand varchar(255)
+

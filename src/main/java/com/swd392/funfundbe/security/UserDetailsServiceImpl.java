@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserService userService;
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) {
         UserTbl user = userService.getUserByEmail(email);
         Collection<? extends GrantedAuthority> authorities =
                 List.of(new SimpleGrantedAuthority(user.getRole().getRoleId()));

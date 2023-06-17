@@ -3,10 +3,12 @@ package com.swd392.funfundbe.service;
 import java.util.Date;
 import java.util.Optional;
 
+import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
+import com.swd392.funfundbe.model.CustomError;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.swd392.funfundbe.exception.BadRequestException;
 import com.swd392.funfundbe.model.Request.RegisterUserRequest;
 import com.swd392.funfundbe.model.Response.UserResponse;
 import com.swd392.funfundbe.model.entity.RoleTbl;
@@ -53,21 +55,31 @@ public class UserService {
     // userRepository.save(newUser);
     // }
 
-    public UserResponse registerUser(RegisterUserRequest request) {
+    public UserResponse registerUser(RegisterUserRequest request) throws CustomBadRequestException, CustomNotFoundException {
         UserTbl currentUser = AuthenticateService.getCurrentUserFromSecurityContext();
         if (currentUser.getStatus().equals(LoginStatus.APPROVED))
-            throw new BadRequestException("Current user has been registered");
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Current user has been registered").build()
+            );
         if (currentUser.getStatus().equals(LoginStatus.DELETED))
-            throw new BadRequestException("Current user has been banned");
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Current user has been banned").build()
+            );
         if (currentUser.getStatus().equals(LoginStatus.PENDING))
-            throw new BadRequestException("Current user is waiting for admin approval");
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Current user is waiting for admin approval").build()
+            );
 
         if (request.getRoleId().equals(Role.ADMIN))
-            throw new BadRequestException("Role is not valid for registering");
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Role is not valid for registering").build()
+            );
 
         UserTbl user = userRepository.findById(currentUser.getUserId()).get();
         RoleTbl role = roleRepository.findById(request.getRoleId().toString())
-                .orElseThrow(() -> new BadRequestException("Role not found"));
+                .orElseThrow(() -> new CustomBadRequestException(
+                        CustomError.builder().code("400").message("Role not found").build()
+                ));
         user.setRole(role);
         user.setFull_name(request.getFullName().toUpperCase());
         user.setPhone(request.getPhone());

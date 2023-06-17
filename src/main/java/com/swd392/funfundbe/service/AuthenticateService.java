@@ -1,5 +1,7 @@
 package com.swd392.funfundbe.service;
 
+import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
+import com.swd392.funfundbe.model.CustomError;
 import com.swd392.funfundbe.model.Response.AuthenticateResponse;
 import com.swd392.funfundbe.model.entity.UserTbl;
 import com.swd392.funfundbe.security.UserDetailsImpl;
@@ -14,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AuthenticateService {
 
-    public static UserTbl getCurrentUserFromSecurityContext() {
+    public static UserTbl getCurrentUserFromSecurityContext() throws CustomNotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
@@ -22,10 +24,12 @@ public class AuthenticateService {
                 return ((UserDetailsImpl) principal).getUser();
             }
         }
-        throw new UsernameNotFoundException("Current User not found in the security context");
+        throw new CustomNotFoundException(
+                CustomError.builder().code("404").message("Current user not found in the security context").build()
+        );
     }
 
-    public AuthenticateResponse authenticateUser() {
+    public AuthenticateResponse authenticateUser() throws CustomNotFoundException {
         UserTbl user = getCurrentUserFromSecurityContext();
         return new AuthenticateResponse(
                 user.getUserId(),
@@ -34,7 +38,7 @@ public class AuthenticateService {
         );
     }
 
-    public static boolean checkCurrentUser() {
+    public static boolean checkCurrentUser() throws CustomNotFoundException {
         UserTbl user = getCurrentUserFromSecurityContext();
         return user.isEnabled();
     }

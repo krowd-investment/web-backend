@@ -2,6 +2,7 @@ package com.swd392.funfundbe.security;
 
 import java.io.IOException;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,9 +52,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         } catch (FirebaseAuthException e) {
-            log.warn("Fail to verify Firebase Token");
+            log.error(e.getMessage());
+            throw new AccessDeniedException("Fail to verify firebase token");
         } catch (Exception e) {
-            log.warn("Fail to set user authentication");
+            log.error(e.getMessage());
+            throw new AccessDeniedException("Fail to set user authentication");
         }
         filterChain.doFilter(request, response);
     }

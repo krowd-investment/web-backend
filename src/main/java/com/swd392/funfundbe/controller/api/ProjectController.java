@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.swd392.funfundbe.controller.api.exception.CustomUnauthorizedException;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomUnauthorizedException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.AreaFilterRequest;
@@ -35,16 +35,16 @@ public interface ProjectController {
         @Operation(summary = "filter project by area")
         @PostMapping("/filterByAreaName")
         public ResponseEntity<List<ProjectResponse>> filterProject(
-                        @RequestBody AreaFilterRequest area) throws CustomForbiddenException;
+                        @RequestBody AreaFilterRequest area) throws CustomForbiddenException, CustomNotFoundException;
 
         @Operation(summary = "filter project by filed")
         @PostMapping("/filterByField")
         public ResponseEntity<List<ProjectResponse>> filterProjectByField(
-                        @RequestBody FieldFilterRequest filterRequest) throws CustomForbiddenException;
+                        @RequestBody FieldFilterRequest filterRequest) throws CustomForbiddenException, CustomNotFoundException;
 
         @Operation(summary = "filter project by target")
         @PostMapping("/filterByTarget")
         public ResponseEntity<List<ProjectResponse>> filterProjectByTarget(
-                        @RequestBody TargetCapitalFilterRequest target) throws CustomForbiddenException;
+                        @RequestBody TargetCapitalFilterRequest target) throws CustomForbiddenException, CustomNotFoundException;
 
 }

@@ -4,16 +4,13 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import com.swd392.funfundbe.controller.api.exception.custom.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
-import com.swd392.funfundbe.controller.api.exception.custom.CustomDuplicateFieldException;
-import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
-import com.swd392.funfundbe.controller.api.exception.custom.CustomInternalServerException;
-import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.CustomError;
 import com.swd392.funfundbe.model.ErrorMessage;
 
@@ -27,7 +24,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(CustomBadRequestException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public Map<String, CustomError> notFoundIdException(CustomBadRequestException ex) {
+    public Map<String, CustomError> badRequestException(CustomBadRequestException ex) {
         return ex.getErrorHashMap();
     }
 
@@ -39,13 +36,13 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(CustomForbiddenException.class)
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
-    public Map<String, CustomError> forBiddenException(CustomForbiddenException ex) {
+    public Map<String, CustomError> forbiddenException(CustomForbiddenException ex) {
         return ex.getErrorHashMap();
     }
 
     @ExceptionHandler(CustomUnauthorizedException.class)
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    public Map<String, CustomError> unAuthorizedException(CustomUnauthorizedException ex) {
+    public Map<String, CustomError> unauthorizedException(CustomUnauthorizedException ex) {
         return ex.getErrorHashMap();
     }
 
@@ -65,6 +62,12 @@ public class ApiExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage duplicateException(Exception ex) {
         return new ErrorMessage(409, "Duplicate key in db: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ErrorMessage handleAccessDeniedException(RuntimeException ex) {
+        return new ErrorMessage(403, ex.getMessage());
     }
 
 }

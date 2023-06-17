@@ -3,11 +3,10 @@ package com.swd392.funfundbe.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 import org.springframework.stereotype.Service;
 
-import com.swd392.funfundbe.controller.api.exception.CustomUnauthorizedException;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomUnauthorizedException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.CustomError;
@@ -85,8 +84,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectResponse> filterProjectByAreaName(AreaFilterRequest area)
-            throws CustomForbiddenException {
+    public List<ProjectResponse> filterProjectByAreaName(AreaFilterRequest area) throws CustomForbiddenException, CustomNotFoundException {
         boolean check = AuthenticateService.checkCurrentUser();
         if (!check) {
             throw new CustomForbiddenException(
@@ -109,7 +107,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectResponse> filterProjectByFieldName(FieldFilterRequest field) throws CustomForbiddenException {
+    public List<ProjectResponse> filterProjectByFieldName(FieldFilterRequest field) throws CustomForbiddenException, CustomNotFoundException {
         boolean check = AuthenticateService.checkCurrentUser();
         if (!check) {
             throw new CustomForbiddenException(
@@ -132,8 +130,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectResponse> filterProjectByTargetCapital(TargetCapitalFilterRequest target)
-            throws CustomForbiddenException {
+    public List<ProjectResponse> filterProjectByTargetCapital(TargetCapitalFilterRequest target) throws CustomForbiddenException, CustomNotFoundException {
         boolean check = AuthenticateService.checkCurrentUser();
         if (!check) {
             throw new CustomForbiddenException(

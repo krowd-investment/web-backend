@@ -2,7 +2,7 @@ package com.swd392.funfundbe.service.project;
 
 import java.util.List;
 
-import com.swd392.funfundbe.controller.api.exception.CustomUnauthorizedException;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomUnauthorizedException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.AreaFilterRequest;
@@ -18,12 +18,10 @@ public interface ProjectService {
         public ProjectDetailResponse getProjectDetailById(int id)
                         throws CustomForbiddenException, CustomNotFoundException;
 
-        public List<ProjectResponse> filterProjectByAreaName(AreaFilterRequest area)
-                        throws CustomForbiddenException;
+        public List<ProjectResponse> filterProjectByAreaName(AreaFilterRequest area) throws CustomForbiddenException, CustomNotFoundException;
 
-        public List<ProjectResponse> filterProjectByFieldName(FieldFilterRequest field) throws CustomForbiddenException;
+        public List<ProjectResponse> filterProjectByFieldName(FieldFilterRequest field) throws CustomForbiddenException, CustomNotFoundException;
 
-        public List<ProjectResponse> filterProjectByTargetCapital(TargetCapitalFilterRequest target)
-                        throws CustomForbiddenException;
+        public List<ProjectResponse> filterProjectByTargetCapital(TargetCapitalFilterRequest target) throws CustomForbiddenException, CustomNotFoundException;
 
 }

@@ -1,5 +1,7 @@
 package com.swd392.funfundbe.controller.api;
 
+import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,7 +21,7 @@ public interface AdminController {
     })
     @PutMapping("/approvePO")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> approvePO(@RequestParam("poId") Integer poId);
+    public ResponseEntity<?> approvePO(@RequestParam("poId") Integer poId) throws CustomNotFoundException, CustomBadRequestException;
 
     @Operation(
             summary = "Reject PO registration",
@@ -31,5 +33,5 @@ public interface AdminController {
     })
     @PutMapping("/rejectPO")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> rejectPO(@RequestParam("poId") Integer poId);
+    public ResponseEntity<?> rejectPO(@RequestParam("poId") Integer poId) throws CustomNotFoundException, CustomBadRequestException;
 }

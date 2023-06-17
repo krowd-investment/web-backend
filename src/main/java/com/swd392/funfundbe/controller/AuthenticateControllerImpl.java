@@ -1,6 +1,7 @@
 package com.swd392.funfundbe.controller;
 
 import com.swd392.funfundbe.controller.api.AuthenticateController;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Response.AuthenticateResponse;
 import com.swd392.funfundbe.service.AuthenticateService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticateControllerImpl implements AuthenticateController {
     private final AuthenticateService authenticateService;
     @Override
-    public ResponseEntity<AuthenticateResponse> authenticateUser() {
+    public ResponseEntity<AuthenticateResponse> authenticateUser() throws CustomNotFoundException {
         AuthenticateResponse authenticateResponse = authenticateService.authenticateUser();
         return new ResponseEntity<>(
                 authenticateResponse, HttpStatus.OK

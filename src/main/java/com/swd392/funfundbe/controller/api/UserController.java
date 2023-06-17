@@ -1,5 +1,7 @@
 package com.swd392.funfundbe.controller.api;
 
+import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.RegisterUserRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,5 +23,5 @@ public interface UserController {
             @ApiResponse(responseCode = "200", description = "Register user successfully")
     })
     @PostMapping
-    public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterUserRequest request);
+    public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterUserRequest request) throws CustomBadRequestException, CustomNotFoundException;
 }

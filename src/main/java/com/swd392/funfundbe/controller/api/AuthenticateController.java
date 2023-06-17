@@ -1,5 +1,6 @@
 package com.swd392.funfundbe.controller.api;
 
+import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Response.AuthenticateResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,5 +20,5 @@ public interface AuthenticateController {
             @ApiResponse(responseCode = "200", description = "Authenticate user successfully")
     })
     @GetMapping
-    public ResponseEntity<AuthenticateResponse> authenticateUser();
+    public ResponseEntity<AuthenticateResponse> authenticateUser() throws CustomNotFoundException;
 }

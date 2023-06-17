@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.swd392.funfundbe.controller.api.ProjectController;
-import com.swd392.funfundbe.controller.api.exception.CustomUnauthorizedException;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomUnauthorizedException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.AreaFilterRequest;
@@ -37,22 +37,19 @@ public class ProjectControllerImpl implements ProjectController {
     }
 
     @Override
-    public ResponseEntity<List<ProjectResponse>> filterProject(AreaFilterRequest area)
-            throws CustomForbiddenException {
+    public ResponseEntity<List<ProjectResponse>> filterProject(AreaFilterRequest area) throws CustomForbiddenException, CustomNotFoundException {
         List<ProjectResponse> projectResponses = projectService.filterProjectByAreaName(area);
         return ResponseEntity.ok(projectResponses);
     }
 
     @Override
-    public ResponseEntity<List<ProjectResponse>> filterProjectByField(FieldFilterRequest filterRequest)
-            throws CustomForbiddenException {
+    public ResponseEntity<List<ProjectResponse>> filterProjectByField(FieldFilterRequest filterRequest) throws CustomForbiddenException, CustomNotFoundException {
         List<ProjectResponse> projectResponses = projectService.filterProjectByFieldName(filterRequest);
         return ResponseEntity.ok(projectResponses);
     }
 
     @Override
-    public ResponseEntity<List<ProjectResponse>> filterProjectByTarget(TargetCapitalFilterRequest target)
-            throws CustomForbiddenException {
+    public ResponseEntity<List<ProjectResponse>> filterProjectByTarget(TargetCapitalFilterRequest target) throws CustomForbiddenException, CustomNotFoundException {
         List<ProjectResponse> projectResponses = projectService.filterProjectByTargetCapital(target);
         return ResponseEntity.ok(projectResponses);
     }
