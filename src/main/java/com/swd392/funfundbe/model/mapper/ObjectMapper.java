@@ -9,6 +9,7 @@ public class ObjectMapper {
         return ProjectResponse.builder().projectId(project.getProjectId()).projectName(project.getProjectName())
                 .createAt(project.getCreateAt())
                 .description(project.getProjectDescription())
+                .branch(project.getBrand())
                 .image(project.getImage()).build();
     }
 
@@ -20,6 +21,7 @@ public class ObjectMapper {
                 .targetCapital(project.getInvestmentTargetCapital())
                 .capital(project.getInvestedCapital())
                 .sharedRevenue(project.getSharedRevenue())
+                .branch(project.getBrand())
                 .build();
     }
 }

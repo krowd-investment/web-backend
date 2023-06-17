@@ -291,5 +291,5 @@ values ('ADMIN', 'viettien1602@gmail.com', '0123456789', getdate(), 'APPROVED', 
 
  Alter table Project 
  Add project_name varchar(255)
- Add table Project 
+ Alter table Project 
  Add brand varchar(255)

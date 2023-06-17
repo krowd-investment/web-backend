@@ -21,4 +21,5 @@ public class ProjectDetailResponse {
     private BigDecimal mutiplier;
     private int duration;
     private BigDecimal capital;
+    private String branch;
 }

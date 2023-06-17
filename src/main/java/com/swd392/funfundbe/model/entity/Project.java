@@ -32,6 +32,8 @@ public class Project {
     private int projectId;
     @Column(name = "project_name")
     private String projectName;
+    @Column(name = "brand")
+    private String brand;
     @Column(name = "investment_target_capital")
     private BigDecimal investmentTargetCapital;
     @Column(name = "invested_capital")

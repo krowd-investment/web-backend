@@ -53,4 +53,42 @@ public class UserService {
     // userRepository.save(newUser);
     // }
 
+    public UserResponse registerUser(RegisterUserRequest request) {
+        UserTbl currentUser = AuthenticateService.getCurrentUserFromSecurityContext();
+        if (currentUser.getStatus().equals(LoginStatus.APPROVED))
+            throw new BadRequestException("Current user has been registered");
+        if (currentUser.getStatus().equals(LoginStatus.DELETED))
+            throw new BadRequestException("Current user has been banned");
+        if (currentUser.getStatus().equals(LoginStatus.PENDING))
+            throw new BadRequestException("Current user is waiting for admin approval");
+
+        if (request.getRoleId().equals(Role.ADMIN))
+            throw new BadRequestException("Role is not valid for registering");
+
+        UserTbl user = userRepository.findById(currentUser.getUserId()).get();
+        RoleTbl role = roleRepository.findById(request.getRoleId().toString())
+                .orElseThrow(() -> new BadRequestException("Role not found"));
+        user.setRole(role);
+        user.setFull_name(request.getFullName().toUpperCase());
+        user.setPhone(request.getPhone());
+        user.setAvatar(request.getAvatar());
+        user.setId_card(request.getId_card());
+        user.setGender(request.getGender().toString());
+        user.setBirthdate(request.getBirthdate());
+        user.setTaxIdentification(request.getTaxIdentification());
+        user.setAddress(request.getAddress());
+        user.setBankName(request.getBankName());
+        user.setBank_account(request.getBankAccount());
+        user.setMomo(request.getMomo());
+
+        if (role.getRoleId().equals(Role.INVESTOR.toString())) {
+            user.setStatus(LoginStatus.APPROVED);
+            user.setEnabled(true);
+        } else {
+            user.setStatus(LoginStatus.PENDING);
+        }
+
+        return new UserResponse(user);
+    }
+
 }

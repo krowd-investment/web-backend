@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserControllerImpl implements UserController {
     private final UserService userService;
+
     @Override
     public ResponseEntity<UserResponse> registerUser(RegisterUserRequest request) {
         UserResponse userResponse = userService.registerUser(request);
         return new ResponseEntity<>(
-                userResponse, HttpStatus.OK
-        );
+                userResponse, HttpStatus.OK);
     }
 }
