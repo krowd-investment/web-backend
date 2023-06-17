@@ -6,6 +6,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.swd392.funfundbe.exception.BadRequestException;
+import com.swd392.funfundbe.model.Request.RegisterUserRequest;
+import com.swd392.funfundbe.model.Response.UserResponse;
 import com.swd392.funfundbe.model.entity.RoleTbl;
 import com.swd392.funfundbe.model.entity.UserTbl;
 import com.swd392.funfundbe.model.enums.LoginStatus;

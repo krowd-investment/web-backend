@@ -1,5 +1,6 @@
 package com.swd392.funfundbe.model.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -30,9 +31,9 @@ public class UserTbl {
     private String avatar;
     private String id_card;
     private String gender;
-    private Date birthdate;
+    private LocalDate birthdate;
     @Column(name = "tax_identification")
-    private String taxIndentification;
+    private String taxIdentification;
     private String address;
     @Column(name = "bank_name")
     private String bankName;
