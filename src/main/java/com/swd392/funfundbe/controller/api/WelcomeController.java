@@ -10,14 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/api/v1")
 public interface WelcomeController {
 
-    @Operation(
-            summary = "Welcome user with username",
-            description = "Welcome user with username",
-            tags = "welcome"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Access api successfully")
-    })
-    @GetMapping("/welcome")
-    public String welcomeUser(@RequestParam(name = "username") String username);
+        @Operation(summary = "Welcome user with username", description = "Welcome user with username", tags = "welcome")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Access api successfully")
+        })
+        @GetMapping("/welcome")
+        public String welcomeUser(@RequestParam(name = "username") String username);
 }

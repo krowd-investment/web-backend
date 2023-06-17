@@ -7,5 +7,5 @@ import com.swd392.funfundbe.model.entity.Field;
 
 @Repository
 public interface FieldRepository extends JpaRepository<Field, Integer> {
-
+    Field findByFieldId(int fieldId);
 }

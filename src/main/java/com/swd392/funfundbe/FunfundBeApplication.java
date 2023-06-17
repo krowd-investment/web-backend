@@ -20,29 +20,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @SpringBootApplication
-@SecurityScheme(
-		name = "token_auth",
-		type = SecuritySchemeType.HTTP,
-		in = SecuritySchemeIn.HEADER,
-		scheme = "bearer",
-		bearerFormat = "JWT"
-)
-@OpenAPIDefinition(
-		info = @Info(
-				title = "API Doc for Krowd Investment FunFund Web Service",
-				description = "This is list of endpoints and documentations of REST API for FunFund Web Service",
-				version = "1.0"
-		),
-		servers = {
-			@Server(url = "http://localhost:8080", description = "Local development server domain")
-		},
-		security = {
-				@SecurityRequirement(name = "token_auth")
-		},
-		tags = {
-				@Tag(name = "welcome", description = "REST API endpoint for welcome user")
-		}
-)
+@SecurityScheme(name = "token_auth", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER, scheme = "bearer", bearerFormat = "JWT")
+@OpenAPIDefinition(info = @Info(title = "API Doc for Krowd Investment FunFund Web Service", description = "This is list of endpoints and documentations of REST API for FunFund Web Service", version = "1.0"), servers = {
+		@Server(url = "http://localhost:8080", description = "Local development server domain")
+}, security = {
+		@SecurityRequirement(name = "token_auth")
+}, tags = {
+		@Tag(name = "welcome", description = "REST API endpoint for welcome user")
+})
 @Slf4j
 public class FunfundBeApplication {
 
@@ -55,7 +40,7 @@ public class FunfundBeApplication {
 			FirebaseApp app = FirebaseApp.getApps().isEmpty()
 					? FirebaseApp.initializeApp(options)
 					: FirebaseApp.getInstance();
-//			FirebaseApp.initializeApp(options, "FunFundFirebaseApp");
+			// FirebaseApp.initializeApp(options, "FunFundFirebaseApp");
 		} catch (IOException e) {
 			log.error(e.getMessage());
 			throw new RuntimeException(e);

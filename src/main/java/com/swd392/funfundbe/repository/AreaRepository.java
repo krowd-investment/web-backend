@@ -7,5 +7,5 @@ import com.swd392.funfundbe.model.entity.Area;
 
 @Repository
 public interface AreaRepository extends JpaRepository<Area, Integer> {
-
+    Area findByAreaId(int areaId);
 }

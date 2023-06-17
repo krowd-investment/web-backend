@@ -30,6 +30,8 @@ public class Project {
     @Column(name = "project_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int projectId;
+    @Column(name = "project_name")
+    private String projectName;
     @Column(name = "investment_target_capital")
     private BigDecimal investmentTargetCapital;
     @Column(name = "invested_capital")
@@ -56,6 +58,8 @@ public class Project {
     private String projectDescription;
     @Column(name = "business_license")
     private String businessLicense;
+    @Column(name = "created_at")
+    private Date createAt;
     @Column(name = "status")
     private String status;
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
@@ -69,11 +73,9 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "updated_by", referencedColumnName = "user_id")
     private UserTbl projectUpdatedBy;
-
     @ManyToOne
     @JoinColumn(name = "field_id", referencedColumnName = "field_id")
     private Field field;
-
     @ManyToOne
     @JoinColumn(name = "area_id", referencedColumnName = "area_id")
     private Area area;
