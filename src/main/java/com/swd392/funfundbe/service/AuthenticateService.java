@@ -29,6 +29,11 @@ public class AuthenticateService {
         );
     }
 
+    public static boolean checkCurrentUser() throws CustomNotFoundException {
+        UserTbl user = getCurrentUserFromSecurityContext();
+        return user.isEnabled();
+    }
+
     public AuthenticateResponse authenticateUser() throws CustomNotFoundException {
         UserTbl user = getCurrentUserFromSecurityContext();
         return new AuthenticateResponse(
@@ -38,8 +43,5 @@ public class AuthenticateService {
         );
     }
 
-    public static boolean checkCurrentUser() throws CustomNotFoundException {
-        UserTbl user = getCurrentUserFromSecurityContext();
-        return user.isEnabled();
-    }
+
 }

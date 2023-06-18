@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.CustomError;
 import org.springframework.stereotype.Service;
@@ -100,7 +101,18 @@ public class UserService {
             user.setStatus(LoginStatus.PENDING);
         }
 
+        // Bỏ thông tin vào bảng investor hoặc po tương ứng
+        // Tạo ra ví: GeneralWallet, CollectionWallet
+
         return new UserResponse(user);
     }
 
+    public UserResponse getCurrentUserInfo() throws CustomNotFoundException, CustomForbiddenException {
+        boolean checkCurrentUser = AuthenticateService.checkCurrentUser();
+        if (!checkCurrentUser) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("can't access this api").field("user_status").build());
+        }
+        return new UserResponse(AuthenticateService.getCurrentUserFromSecurityContext());
+    }
 }

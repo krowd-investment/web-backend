@@ -5,16 +5,17 @@ import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundExcept
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/admin")
+@Tag(name = "admin")
 public interface AdminController {
     @Operation(
             summary = "Approve PO registration",
-            description = "Approve PO registration",
-            tags = "admin"
+            description = "Approve PO registration"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Approve PO successfully")
@@ -25,8 +26,7 @@ public interface AdminController {
 
     @Operation(
             summary = "Reject PO registration",
-            description = "Reject PO registration",
-            tags = "admin"
+            description = "Reject PO registration"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Reject PO successfully")
