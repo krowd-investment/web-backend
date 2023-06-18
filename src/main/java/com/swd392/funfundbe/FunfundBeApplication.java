@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.SortComparator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -45,7 +46,12 @@ import java.io.IOException;
 			@SecurityRequirement(name = "token_auth")
 	},
 	tags = {
-			@Tag(name = "welcome", description = "REST API endpoint for welcome user")
+			@Tag(name = "welcome", description = "REST API endpoints for welcome user"),
+			@Tag(name = "authentication", description = "REST API endpoints for authenticate user"),
+			@Tag(name = "user", description = "REST API endpoints for user"),
+			@Tag(name = "admin", description = "REST API endpoints for admin"),
+			@Tag(name = "project owner", description = "REST API endpoints for PO")
+
 	}
 )
 @Slf4j
