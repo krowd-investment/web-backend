@@ -1,6 +1,7 @@
 package com.swd392.funfundbe.model.Response;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,5 +22,8 @@ public class ProjectDetailResponse {
     private BigDecimal mutiplier;
     private int duration;
     private BigDecimal capital;
-    private String branch;
+    private String brand;
+    private Date startDate;
+    private Date endDate;
+    private String status;
 }

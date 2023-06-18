@@ -20,7 +20,7 @@ import com.swd392.funfundbe.model.Response.ProjectResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 
-@RequestMapping("api/projects")
+@RequestMapping("/api/projects")
 public interface ProjectController {
         @Operation(summary = "get all project has status is approved")
         @GetMapping("/getAll")
@@ -40,11 +40,13 @@ public interface ProjectController {
         @Operation(summary = "filter project by filed")
         @PostMapping("/filterByField")
         public ResponseEntity<List<ProjectResponse>> filterProjectByField(
-                        @RequestBody FieldFilterRequest filterRequest) throws CustomForbiddenException, CustomNotFoundException;
+                        @RequestBody FieldFilterRequest filterRequest)
+                        throws CustomForbiddenException, CustomNotFoundException;
 
         @Operation(summary = "filter project by target")
         @PostMapping("/filterByTarget")
         public ResponseEntity<List<ProjectResponse>> filterProjectByTarget(
-                        @RequestBody TargetCapitalFilterRequest target) throws CustomForbiddenException, CustomNotFoundException;
+                        @RequestBody TargetCapitalFilterRequest target)
+                        throws CustomForbiddenException, CustomNotFoundException;
 
 }

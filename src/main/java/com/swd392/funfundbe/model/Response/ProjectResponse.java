@@ -21,5 +21,8 @@ public class ProjectResponse {
     private String fieldName;
     private String image;
     private Date createAt;
-    private String branch;
+    private String brand;
+    private Date startDate;
+    private Date endDate;
+    private String status;
 }

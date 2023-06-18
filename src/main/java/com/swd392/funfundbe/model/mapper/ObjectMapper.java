@@ -9,8 +9,12 @@ public class ObjectMapper {
         return ProjectResponse.builder().projectId(project.getProjectId()).projectName(project.getProjectName())
                 .createAt(project.getCreateAt())
                 .description(project.getProjectDescription())
-                .branch(project.getBrand())
-                .image(project.getImage()).build();
+                .brand(project.getBrand())
+                .image(project.getImage())
+                .endDate(project.getEndDate())
+                .startDate(project.getStartDate())
+                .status(project.getStatus())
+                .build();
     }
 
     public static ProjectDetailResponse fromProjectToProjectDetailResponse(Project project) {
@@ -21,7 +25,10 @@ public class ObjectMapper {
                 .targetCapital(project.getInvestmentTargetCapital())
                 .capital(project.getInvestedCapital())
                 .sharedRevenue(project.getSharedRevenue())
-                .branch(project.getBrand())
+                .brand(project.getBrand())
+                .endDate(project.getEndDate())
+                .startDate(project.getStartDate())
+                .status(project.getStatus())
                 .build();
     }
 }

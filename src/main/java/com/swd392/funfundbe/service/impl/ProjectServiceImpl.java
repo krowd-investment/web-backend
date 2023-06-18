@@ -84,7 +84,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectResponse> filterProjectByAreaName(AreaFilterRequest area) throws CustomForbiddenException, CustomNotFoundException {
+    public List<ProjectResponse> filterProjectByAreaName(AreaFilterRequest area)
+            throws CustomForbiddenException, CustomNotFoundException {
         boolean check = AuthenticateService.checkCurrentUser();
         if (!check) {
             throw new CustomForbiddenException(
@@ -95,7 +96,7 @@ public class ProjectServiceImpl implements ProjectService {
         for (Project p : projects) {
             String areaNameCheck = buildString(p.getArea().getCity(), p.getArea().getDistrict());
             boolean chck = areaNameCheck.toLowerCase().contains(area.getAreaName().trim().toLowerCase());
-            if (chck) {
+            if (chck && p.getStatus().equalsIgnoreCase("APPROVED")) {
                 ProjectResponse projectResponse = ObjectMapper.fromProjectToProjectResponse(p);
                 projectResponse.setFieldName(p.getField().getName());
                 projectResponse.setAreaName(p.getArea().getCity() + "-" + p.getArea().getDistrict());
@@ -107,7 +108,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectResponse> filterProjectByFieldName(FieldFilterRequest field) throws CustomForbiddenException, CustomNotFoundException {
+    public List<ProjectResponse> filterProjectByFieldName(FieldFilterRequest field)
+            throws CustomForbiddenException, CustomNotFoundException {
         boolean check = AuthenticateService.checkCurrentUser();
         if (!check) {
             throw new CustomForbiddenException(
@@ -118,7 +120,7 @@ public class ProjectServiceImpl implements ProjectService {
         for (Project p : projects) {
             String fieldCheck = p.getField().getName();
             boolean chck = fieldCheck.toLowerCase().contains(field.getFieldName().trim().toLowerCase());
-            if (chck) {
+            if (chck && p.getStatus().equalsIgnoreCase("APPROVED")) {
                 ProjectResponse projectResponse = ObjectMapper.fromProjectToProjectResponse(p);
                 projectResponse.setFieldName(p.getField().getName());
                 projectResponse.setAreaName(p.getArea().getCity() + "-" + p.getArea().getDistrict());
@@ -130,7 +132,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectResponse> filterProjectByTargetCapital(TargetCapitalFilterRequest target) throws CustomForbiddenException, CustomNotFoundException {
+    public List<ProjectResponse> filterProjectByTargetCapital(TargetCapitalFilterRequest target)
+            throws CustomForbiddenException, CustomNotFoundException {
         boolean check = AuthenticateService.checkCurrentUser();
         if (!check) {
             throw new CustomForbiddenException(
@@ -141,7 +144,7 @@ public class ProjectServiceImpl implements ProjectService {
         for (Project p : projects) {
             BigDecimal targetCheck = p.getInvestmentTargetCapital();
             boolean chck = targetCheck.doubleValue() == target.getTarget().doubleValue();
-            if (chck) {
+            if (chck && p.getStatus().equalsIgnoreCase("APPROVED")) {
                 ProjectResponse projectResponse = ObjectMapper.fromProjectToProjectResponse(p);
                 projectResponse.setFieldName(p.getField().getName());
                 projectResponse.setAreaName(p.getArea().getCity() + "-" + p.getArea().getDistrict());
