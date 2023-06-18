@@ -4,6 +4,7 @@ import com.swd392.funfundbe.controller.api.UserController;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
+import com.swd392.funfundbe.model.Request.NotificationRequest;
 import com.swd392.funfundbe.model.Request.PersonalWalletTransactionRequest;
 import com.swd392.funfundbe.model.Request.RegisterUserRequest;
 import com.swd392.funfundbe.model.Response.PersonalWalletResponse;
@@ -25,7 +26,8 @@ public class UserControllerImpl implements UserController {
     private final UserService userService;
 
     @Override
-    public ResponseEntity<UserResponse> registerUser(RegisterUserRequest request) throws CustomBadRequestException, CustomNotFoundException {
+    public ResponseEntity<UserResponse> registerUser(RegisterUserRequest request)
+            throws CustomBadRequestException, CustomNotFoundException {
         UserResponse userResponse = userService.registerUser(request);
         return new ResponseEntity<>(
                 userResponse, HttpStatus.OK);
@@ -38,7 +40,6 @@ public class UserControllerImpl implements UserController {
                 userResponse, HttpStatus.OK);
     }
 
-
     @Override
     public ResponseEntity<PersonalWalletResponse> getGeneralWallet() {
         PersonalWalletResponse response = new PersonalWalletResponse(
@@ -46,11 +47,9 @@ public class UserControllerImpl implements UserController {
                 20,
                 WalletType.GENERAL_WALLET.toString(),
                 new BigDecimal(2000000),
-                new Date()
-        );
+                new Date());
         return new ResponseEntity<>(
-                response, HttpStatus.OK
-        );
+                response, HttpStatus.OK);
     }
 
     @Override
@@ -60,11 +59,9 @@ public class UserControllerImpl implements UserController {
                 20,
                 WalletType.COLLECTION_WALLET.toString(),
                 new BigDecimal(2000000),
-                new Date()
-        );
+                new Date());
         return new ResponseEntity<>(
-                response, HttpStatus.OK
-        );
+                response, HttpStatus.OK);
     }
 
     @Override
@@ -80,5 +77,15 @@ public class UserControllerImpl implements UserController {
     @Override
     public ResponseEntity<?> transferMoney(PersonalWalletTransactionRequest request) {
         return new ResponseEntity<>("Transfer money successfully", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> logout() {
+        return ResponseEntity.ok("log out successfully");
+    }
+
+    @Override
+    public ResponseEntity<?> sendNotification(NotificationRequest notificationRequest) {
+        return ResponseEntity.ok("Send Notification Successfully");
     }
 }

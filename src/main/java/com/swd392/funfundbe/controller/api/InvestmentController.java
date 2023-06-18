@@ -25,7 +25,7 @@ public interface InvestmentController {
     public ResponseEntity<InvestedProjectResponse> investProject(@RequestBody InvestProjectRequest request);
 
     @Operation(summary = "invest a project")
-    @PostMapping("/invest")
+    @PostMapping("/cancel")
     public ResponseEntity<String> cancelProject(@RequestBody InvestProjectRequest request);
 
 }
