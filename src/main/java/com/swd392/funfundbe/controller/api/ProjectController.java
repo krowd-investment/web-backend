@@ -22,6 +22,7 @@ import com.swd392.funfundbe.model.Response.ProjectResponse;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RequestMapping("/api/projects")
+@Tag(name = "project")
 public interface ProjectController {
         @Operation(summary = "get all project has status is approved")
         @GetMapping("/getAll")

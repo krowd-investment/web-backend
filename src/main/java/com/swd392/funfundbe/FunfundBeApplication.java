@@ -50,7 +50,9 @@ import java.io.IOException;
 			@Tag(name = "authentication", description = "REST API endpoints for authenticate user"),
 			@Tag(name = "user", description = "REST API endpoints for user"),
 			@Tag(name = "admin", description = "REST API endpoints for admin"),
-			@Tag(name = "project owner", description = "REST API endpoints for PO")
+			@Tag(name = "project owner", description = "REST API endpoints for PO"),
+			@Tag(name = "project", description = "REST API endpoints for projects"),
+			@Tag(name = "investment", description = "REST API endpoints for invest projects")
 
 	}
 )
@@ -69,19 +71,6 @@ public class FunfundBeApplication {
 	}
 
 	public static void main(String[] args) {
-//		try {
-//			FileInputStream serviceAccount = new FileInputStream("src/main/resources/serviceAccountKey.json");
-//			FirebaseOptions options = FirebaseOptions.builder()
-//					.setCredentials(GoogleCredentials.fromStream(serviceAccount))
-//					.build();
-//			FirebaseApp app = FirebaseApp.getApps().isEmpty()
-//					? FirebaseApp.initializeApp(options)
-//					: FirebaseApp.getInstance();
-//			// FirebaseApp.initializeApp(options, "FunFundFirebaseApp");
-//		} catch (IOException e) {
-//			log.error(e.getMessage());
-//			throw new RuntimeException(e);
-//		}
 		SpringApplication.run(FunfundBeApplication.class, args);
 	}
 
