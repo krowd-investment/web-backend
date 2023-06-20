@@ -3,9 +3,8 @@ package com.swd392.funfundbe.model.Response;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.google.auto.value.AutoValue.Builder;
-
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,4 +21,6 @@ public class InvestedProjectResponse {
     private Date createAt;
     private Date updateAt;
     private String status = "SUCCESS";
+    private int duration;
+    private int userId;
 }

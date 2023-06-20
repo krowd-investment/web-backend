@@ -1,7 +1,10 @@
 package com.swd392.funfundbe.model.mapper;
 
+import com.swd392.funfundbe.model.Request.InvestProjectRequest;
+import com.swd392.funfundbe.model.Response.InvestedProjectResponse;
 import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
+import com.swd392.funfundbe.model.entity.Investment;
 import com.swd392.funfundbe.model.entity.Project;
 
 public class ObjectMapper {
@@ -30,5 +33,26 @@ public class ObjectMapper {
                 .startDate(project.getStartDate())
                 .status(project.getStatus())
                 .build();
+    }
+
+    public static InvestedProjectResponse fromInvestmentToInvestedResponse(Investment investment) {
+        return InvestedProjectResponse.builder().projectId(investment.getProject().getProjectId())
+                .projectName(investment.getProject().getProjectName())
+                .mulplier(investment.getProject().getMultiplier())
+                .image(investment.getProject().getImage())
+                .totalMoney(investment.getTotalMoney())
+                .createAt(investment.getCreatedAt())
+                .updateAt(investment.getUpdatedAt())
+                .status(investment.getStatus())
+                .duration(investment.getProject().getDuration())
+                .userId(investment.getInvestmentUser().getUserId())
+                .build();
+    }
+
+    public static Investment fromInvestmentRequestToInvestment(InvestProjectRequest request) {
+        return Investment.builder().createdAt(request.getCreateAt()).totalMoney(request.getTotalMoney())
+                .updatedAt(request.getCreateAt())
+                .contract("")
+                .status(request.getStatus()).build();
     }
 }
