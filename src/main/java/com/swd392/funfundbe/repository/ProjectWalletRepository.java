@@ -4,7 +4,9 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.swd392.funfundbe.model.entity.Project;
 import com.swd392.funfundbe.model.entity.ProjectWallet;
 
 public interface ProjectWalletRepository extends JpaRepository<ProjectWallet, UUID> {
+    ProjectWallet findByProject(Project project);
 }

@@ -1,40 +1,36 @@
 package com.swd392.funfundbe.controller;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.swd392.funfundbe.controller.api.InvestmentController;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.InvestProjectRequest;
 import com.swd392.funfundbe.model.Response.InvestedProjectResponse;
+import com.swd392.funfundbe.service.investment.InvestmentService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 public class InvestmentControllerImpl implements InvestmentController {
+    private final InvestmentService investmentService;
 
     @Override
-    public ResponseEntity<List<InvestedProjectResponse>> getAllInvestmentByUserId(int id) {
-        Date createDate = new Date();
-        BigDecimal x = new BigDecimal(100);
-        BigDecimal y = new BigDecimal(1.4);
-        List<InvestedProjectResponse> investedProjectResponse = new ArrayList<>();
-        investedProjectResponse
-                .add(new InvestedProjectResponse(1, "Passio", y, "image.png", x, createDate, createDate, "SUCCESSS"));
-        investedProjectResponse
-                .add(new InvestedProjectResponse(2, "Cafe", y, "image.png", x, createDate, createDate, "SUCCESSS"));
-        return ResponseEntity.ok(investedProjectResponse);
+    public ResponseEntity<List<InvestedProjectResponse>> getAllInvestmentOfCurrentUser()
+            throws CustomNotFoundException {
+        List<InvestedProjectResponse> responses = investmentService.getAllInvestmentOfCurrentUser();
+        return ResponseEntity.ok(responses);
     }
 
     @Override
-    public ResponseEntity<InvestedProjectResponse> investProject(InvestProjectRequest request) {
-        Date createDate = new Date();
-        BigDecimal x = new BigDecimal(100);
-        BigDecimal y = new BigDecimal(1.4);
-        return ResponseEntity
-                .ok(new InvestedProjectResponse(1, "Passio", y, "img.png", x, createDate, createDate, "LAUNCHED"));
+    public ResponseEntity<InvestedProjectResponse> investProject(InvestProjectRequest request)
+            throws CustomNotFoundException, CustomForbiddenException {
+        InvestedProjectResponse investedProjectResponse = investmentService.investProject(request);
+        return ResponseEntity.ok(investedProjectResponse);
     }
 
     @Override
