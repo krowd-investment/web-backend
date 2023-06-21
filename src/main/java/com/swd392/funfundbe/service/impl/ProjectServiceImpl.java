@@ -25,7 +25,6 @@ import com.swd392.funfundbe.service.AuthenticateService;
 import com.swd392.funfundbe.service.project.ProjectService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.var;
 
 @Service
 @RequiredArgsConstructor
