@@ -15,6 +15,7 @@ import com.swd392.funfundbe.model.entity.PersonalWallet;
 import com.swd392.funfundbe.model.entity.Project;
 import com.swd392.funfundbe.model.entity.ProjectWallet;
 import com.swd392.funfundbe.model.entity.UserTbl;
+import com.swd392.funfundbe.model.enums.ProjectStatus;
 import com.swd392.funfundbe.model.mapper.ObjectMapper;
 import com.swd392.funfundbe.repository.InvestmentRepository;
 import com.swd392.funfundbe.repository.PersonalWalletRepository;
@@ -73,6 +74,29 @@ public class InvestmentServiceImpl implements InvestmentService {
         investment.setInvestmentId(uuid);
         investmentRepository.save(investment);
         return ObjectMapper.fromInvestmentToInvestedResponse(investment);
+    }
+
+    @Override
+    public InvestedProjectResponse cancelInvested(UUID uuid) throws CustomForbiddenException, CustomNotFoundException {
+        boolean check = AuthenticateService.checkCurrentUser();
+        if (!check) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("can't access this api").field("user_status").build());
+        }
+        Investment investment = investmentRepository.findById(uuid).orElse(null);
+        if (investment == null) {
+            throw new CustomNotFoundException(
+                    CustomError.builder().code("404").message("Not found anything").build());
+        }
+        Project project = projectRepository.findByProjectId(investment.getProject().getProjectId());
+        if (project.getStatus().equalsIgnoreCase(ProjectStatus.STARTED.toString())) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("can't cancel when project started").build());
+        }
+        investment.setStatus("CANCEL");
+        investmentRepository.save(investment);
+        InvestedProjectResponse investedProjectResponse = ObjectMapper.fromInvestmentToInvestedResponse(investment);
+        return investedProjectResponse;
     }
 
 }

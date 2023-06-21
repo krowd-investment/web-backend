@@ -1,6 +1,7 @@
 package com.swd392.funfundbe.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,8 +35,10 @@ public class InvestmentControllerImpl implements InvestmentController {
     }
 
     @Override
-    public ResponseEntity<String> cancelProject(InvestProjectRequest request) {
-        return ResponseEntity.ok("Cancel Project successfully");
+    public ResponseEntity<InvestedProjectResponse> cancelProject(UUID id)
+            throws CustomForbiddenException, CustomNotFoundException {
+        InvestedProjectResponse investedProjectResponse = investmentService.cancelInvested(id);
+        return ResponseEntity.ok(investedProjectResponse);
     }
 
 }

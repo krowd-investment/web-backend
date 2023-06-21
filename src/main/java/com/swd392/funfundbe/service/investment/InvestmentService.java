@@ -1,6 +1,7 @@
 package com.swd392.funfundbe.service.investment;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
@@ -12,4 +13,6 @@ public interface InvestmentService {
 
     InvestedProjectResponse investProject(InvestProjectRequest request)
             throws CustomNotFoundException, CustomForbiddenException;
+
+    InvestedProjectResponse cancelInvested(UUID uuid) throws CustomForbiddenException, CustomNotFoundException;
 }
