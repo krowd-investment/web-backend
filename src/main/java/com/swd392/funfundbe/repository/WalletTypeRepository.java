@@ -7,5 +7,5 @@ import com.swd392.funfundbe.model.entity.WalletType;
 
 @Repository
 public interface WalletTypeRepository extends JpaRepository<WalletType, String> {
-
+    WalletType findBywalleTypeName(String name);
 }

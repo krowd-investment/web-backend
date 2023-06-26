@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.CreateProjectRequest;
 import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
 
@@ -23,7 +25,8 @@ public interface POController {
         // Create projects and submit it to admin
         @Operation(summary = "PO create project", description = "PO create project for investment")
         @PostMapping("/project")
-        public ResponseEntity<?> createProject(@RequestBody @Valid CreateProjectRequest request);
+        public ResponseEntity<?> createProject(@RequestBody @Valid CreateProjectRequest request)
+                        throws CustomNotFoundException, CustomForbiddenException;
 
         // Update project (only before receiving money)
         @Operation(summary = "PO update project", description = "PO update project for investment")
