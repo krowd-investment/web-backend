@@ -20,4 +20,6 @@ values
 ('PROJECT_INVESTMENT_WALLET', 'Project investment wallet', 'Project investment wallet is possessed by each project', ''),
 ('PROJECT_PAYMENT_WALLET', 'Project payment wallet', 'Project payment wallet is possessed by each project', ''),
 ('SERVICE_WALLET', 'Service wallet', 'Service Wallet is for investor to use service of each project', '')
-
+-- update By Thuong
+alter table [Stage]
+    Add stage_status varchar(255)

@@ -6,6 +6,7 @@ import com.swd392.funfundbe.controller.api.exception.custom.CustomUnauthorizedEx
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.AreaFilterRequest;
+import com.swd392.funfundbe.model.Request.CreateProjectRequest;
 import com.swd392.funfundbe.model.Request.FieldFilterRequest;
 import com.swd392.funfundbe.model.Request.TargetCapitalFilterRequest;
 import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
@@ -18,10 +19,15 @@ public interface ProjectService {
         public ProjectDetailResponse getProjectDetailById(int id)
                         throws CustomForbiddenException, CustomNotFoundException;
 
-        public List<ProjectResponse> filterProjectByAreaName(AreaFilterRequest area) throws CustomForbiddenException, CustomNotFoundException;
+        public List<ProjectResponse> filterProjectByAreaName(AreaFilterRequest area)
+                        throws CustomForbiddenException, CustomNotFoundException;
 
-        public List<ProjectResponse> filterProjectByFieldName(FieldFilterRequest field) throws CustomForbiddenException, CustomNotFoundException;
+        public List<ProjectResponse> filterProjectByFieldName(FieldFilterRequest field)
+                        throws CustomForbiddenException, CustomNotFoundException;
 
-        public List<ProjectResponse> filterProjectByTargetCapital(TargetCapitalFilterRequest target) throws CustomForbiddenException, CustomNotFoundException;
+        public List<ProjectResponse> filterProjectByTargetCapital(TargetCapitalFilterRequest target)
+                        throws CustomForbiddenException, CustomNotFoundException;
 
+        public String createProject(CreateProjectRequest projectRequest)
+                        throws CustomNotFoundException, CustomForbiddenException;
 }

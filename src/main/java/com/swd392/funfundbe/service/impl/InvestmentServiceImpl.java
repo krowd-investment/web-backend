@@ -5,22 +5,19 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.CustomError;
 import com.swd392.funfundbe.model.Request.InvestProjectRequest;
 import com.swd392.funfundbe.model.Response.InvestedProjectResponse;
 import com.swd392.funfundbe.model.entity.Investment;
-import com.swd392.funfundbe.model.entity.PersonalWallet;
 import com.swd392.funfundbe.model.entity.Project;
-import com.swd392.funfundbe.model.entity.ProjectWallet;
 import com.swd392.funfundbe.model.entity.UserTbl;
 import com.swd392.funfundbe.model.enums.ProjectStatus;
 import com.swd392.funfundbe.model.mapper.ObjectMapper;
 import com.swd392.funfundbe.repository.InvestmentRepository;
-import com.swd392.funfundbe.repository.PersonalWalletRepository;
 import com.swd392.funfundbe.repository.ProjectRepository;
-import com.swd392.funfundbe.repository.ProjectWalletRepository;
 import com.swd392.funfundbe.repository.UserRepository;
 import com.swd392.funfundbe.service.AuthenticateService;
 import com.swd392.funfundbe.service.investment.InvestmentService;
@@ -95,6 +92,7 @@ public class InvestmentServiceImpl implements InvestmentService {
         }
         investment.setStatus("CANCEL");
         investmentRepository.save(investment);
+
         InvestedProjectResponse investedProjectResponse = ObjectMapper.fromInvestmentToInvestedResponse(investment);
         return investedProjectResponse;
     }

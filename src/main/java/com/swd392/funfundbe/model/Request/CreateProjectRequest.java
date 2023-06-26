@@ -16,11 +16,13 @@ public class CreateProjectRequest {
     private BigDecimal investmentTargetCapital;
     private BigDecimal sharedRevenue;
     private BigDecimal multiplier;
-    private int numberOfStage;
     private int duration;
     private Date startDate;
     private Date endDate;
     private String image;
     private String projectDescription;
     private String businessLicense;
+    private BigDecimal paidAmount = new BigDecimal(0);
+    private BigDecimal remainingAmount = new BigDecimal(0);
+    private BigDecimal investedCapital = new BigDecimal(0);
 }

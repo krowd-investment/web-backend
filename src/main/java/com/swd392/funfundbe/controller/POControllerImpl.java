@@ -1,11 +1,15 @@
 package com.swd392.funfundbe.controller;
 
 import com.swd392.funfundbe.controller.api.POController;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.CreateProjectRequest;
 import com.swd392.funfundbe.model.Response.PersonalWalletResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
 import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
 import com.swd392.funfundbe.model.enums.WalletType;
+import com.swd392.funfundbe.service.project.ProjectService;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +22,13 @@ import java.util.UUID;
 @RestController
 @AllArgsConstructor
 public class POControllerImpl implements POController {
+    private final ProjectService projectService;
 
     @Override
-    public ResponseEntity<?> createProject(CreateProjectRequest request) {
-        return new ResponseEntity<>("Create project successfully", HttpStatus.CREATED);
+    public ResponseEntity<?> createProject(CreateProjectRequest request)
+            throws CustomNotFoundException, CustomForbiddenException {
+        String result = projectService.createProject(request);
+        return ResponseEntity.ok(result);
     }
 
     @Override
@@ -47,8 +54,7 @@ public class POControllerImpl implements POController {
                 projectId,
                 new BigDecimal(2000000000),
                 new Date(),
-                true
-        );
+                true);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -60,10 +66,8 @@ public class POControllerImpl implements POController {
                 projectId,
                 new BigDecimal(2000000000),
                 new Date(),
-                true
-        );
+                true);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
 }

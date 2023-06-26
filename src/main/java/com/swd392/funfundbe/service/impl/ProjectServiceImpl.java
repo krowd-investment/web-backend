@@ -2,6 +2,7 @@ package com.swd392.funfundbe.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -11,16 +12,22 @@ import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenExcep
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.CustomError;
 import com.swd392.funfundbe.model.Request.AreaFilterRequest;
+import com.swd392.funfundbe.model.Request.CreateProjectRequest;
 import com.swd392.funfundbe.model.Request.FieldFilterRequest;
 import com.swd392.funfundbe.model.Request.TargetCapitalFilterRequest;
 import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
+import com.swd392.funfundbe.model.entity.Area;
+import com.swd392.funfundbe.model.entity.Field;
 import com.swd392.funfundbe.model.entity.Project;
+import com.swd392.funfundbe.model.entity.UserTbl;
 import com.swd392.funfundbe.model.enums.ProjectStatus;
+import com.swd392.funfundbe.model.enums.Role;
 import com.swd392.funfundbe.model.mapper.ObjectMapper;
 import com.swd392.funfundbe.repository.AreaRepository;
 import com.swd392.funfundbe.repository.FieldRepository;
 import com.swd392.funfundbe.repository.ProjectRepository;
+import com.swd392.funfundbe.repository.UserRepository;
 import com.swd392.funfundbe.service.AuthenticateService;
 import com.swd392.funfundbe.service.project.ProjectService;
 
@@ -152,6 +159,50 @@ public class ProjectServiceImpl implements ProjectService {
             }
         }
         return projectResponses;
+    }
 
+    @Override
+    public String createProject(CreateProjectRequest projectRequest)
+            throws CustomNotFoundException, CustomForbiddenException {
+        UserTbl user = AuthenticateService.getCurrentUserFromSecurityContext();
+        if (!user.getRole().getRoleId().equals(Role.PO.toString()) || !AuthenticateService.checkCurrentUser()) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("you can't access this feature").build());
+        }
+        Area area = areaRepository.findByAreaId(projectRequest.getAreaId());
+        Field field = fieldRepository.findByFieldId(projectRequest.getFieldId());
+        if (area == null) {
+            throw new CustomNotFoundException(
+                    CustomError.builder().code("404").message("not found area matched").build());
+        }
+        if (field == null) {
+            throw new CustomNotFoundException(
+                    CustomError.builder().code("404").message("not found field matched").build());
+        }
+        Project project = Project.builder().field(field).area(area).projectName(projectRequest.getProjectName())
+                .projectCreatedBy(user)
+                .brand(projectRequest.getBrand())
+                .investedCapital(projectRequest.getInvestedCapital())
+                .investmentTargetCapital(projectRequest.getInvestmentTargetCapital())
+                .sharedRevenue(projectRequest.getSharedRevenue())
+                .multiplier(projectRequest.getMultiplier())
+                .numberOfStage(0)
+                .duration(projectRequest.getDuration())
+                .startDate(projectRequest.getStartDate())
+                .endDate(projectRequest.getEndDate())
+                .image(projectRequest.getImage())
+                .projectDescription(projectRequest.getProjectDescription())
+                .businessLicense(projectRequest.getBusinessLicense())
+                .paidAmount(new BigDecimal(0))
+                .remainingAmount(new BigDecimal(0))
+                .investedCapital(new BigDecimal(0))
+                .status(ProjectStatus.PENDING.toString())
+                .createAt(new Date())
+                .build();
+        Project save = projectRepository.save(project);
+        if (save == null) {
+            return "Create new project failed";
+        }
+        return "Create new project successfully";
     }
 }
