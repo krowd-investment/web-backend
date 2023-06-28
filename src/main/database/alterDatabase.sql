@@ -23,3 +23,7 @@ values
 -- update By Thuong
 alter table [Stage]
     Add stage_status varchar(255)
+
+-- updated by Tien
+insert into PersonalWallet (wallet_id, wallet_type_id, balance, created_at)
+values ('e7e98621-b16a-4226-a31d-bdf7b8cf0dc2', 'SYSTEM_WALLET', 0, GETDATE())

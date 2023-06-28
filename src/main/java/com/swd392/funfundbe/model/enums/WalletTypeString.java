@@ -1,6 +1,6 @@
 package com.swd392.funfundbe.model.enums;
 
-public enum WalletType {
+public enum WalletTypeString {
     SYSTEM_WALLET,
     GENERAL_WALLET,
     COLLECTION_WALLET,

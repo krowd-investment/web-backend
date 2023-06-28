@@ -4,10 +4,8 @@ import com.swd392.funfundbe.controller.api.POController;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.CreateProjectRequest;
-import com.swd392.funfundbe.model.Response.PersonalWalletResponse;
-import com.swd392.funfundbe.model.Response.ProjectResponse;
 import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
-import com.swd392.funfundbe.model.enums.WalletType;
+import com.swd392.funfundbe.model.enums.WalletTypeString;
 import com.swd392.funfundbe.service.project.ProjectService;
 
 import lombok.AllArgsConstructor;
@@ -50,7 +48,7 @@ public class POControllerImpl implements POController {
     public ResponseEntity<ProjectWalletResponse> getProjectInvestmentWallet(int projectId) {
         ProjectWalletResponse response = new ProjectWalletResponse(
                 UUID.randomUUID(),
-                WalletType.PROJECT_INVESTMENT_WALLET.toString(),
+                WalletTypeString.PROJECT_INVESTMENT_WALLET.toString(),
                 projectId,
                 new BigDecimal(2000000000),
                 new Date(),
@@ -62,7 +60,7 @@ public class POControllerImpl implements POController {
     public ResponseEntity<ProjectWalletResponse> getProjectPaymentWallet(int projectId) {
         ProjectWalletResponse response = new ProjectWalletResponse(
                 UUID.randomUUID(),
-                WalletType.PROJECT_PAYMENT_WALLET.toString(),
+                WalletTypeString.PROJECT_PAYMENT_WALLET.toString(),
                 projectId,
                 new BigDecimal(2000000000),
                 new Date(),

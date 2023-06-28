@@ -1,12 +1,21 @@
 package com.swd392.funfundbe.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.CustomError;
+import com.swd392.funfundbe.model.Response.PersonalWalletResponse;
+import com.swd392.funfundbe.model.entity.PersonalWallet;
+import com.swd392.funfundbe.model.entity.WalletType;
+import com.swd392.funfundbe.model.enums.WalletTypeString;
+import com.swd392.funfundbe.repository.PersonalWalletRepository;
+import com.swd392.funfundbe.repository.WalletTypeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +37,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final WalletTypeRepository walletTypeRepository;
+    private final PersonalWalletRepository personalWalletRepository;
 
     public UserTbl getUserByEmail(String email) {
         Optional<UserTbl> isExistUser = userRepository.findByEmail(email);
@@ -102,9 +113,36 @@ public class UserService {
         }
 
         // Bỏ thông tin vào bảng investor hoặc po tương ứng
-        // Tạo ra ví: GeneralWallet, CollectionWallet
+
+        if (user.getRole().getRoleId().equals(Role.INVESTOR.toString())) {
+            createWallet(user, WalletTypeString.GENERAL_WALLET);
+            createWallet(user, WalletTypeString.COLLECTION_WALLET);
+        }
 
         return new UserResponse(user);
+    }
+
+    public void createWallet(UserTbl user, WalletTypeString walletTypeString) throws CustomNotFoundException {
+        WalletType walletType = walletTypeRepository.findById(walletTypeString.toString())
+                .orElseThrow(() -> new CustomNotFoundException(
+                        CustomError.builder()
+                                .code("404").message("General wallet type ID not found")
+                                .build())
+                );
+        PersonalWallet wallet = PersonalWallet.builder()
+                .walletId(UUID.randomUUID())
+                .personalwalletOf(user)
+                .walletType(walletType)
+                .balance(BigDecimal.ZERO)
+                .createdAt(new Date())
+                .build();
+        personalWalletRepository.save(wallet);
+    }
+
+
+    public List<UserResponse> getAllUsers() {
+        List<UserTbl> users = userRepository.findAll();
+        return users.stream().map(UserResponse::new).toList();
     }
 
     public UserResponse getCurrentUserInfo() throws CustomNotFoundException, CustomForbiddenException {
@@ -115,4 +153,55 @@ public class UserService {
         }
         return new UserResponse(AuthenticateService.getCurrentUserFromSecurityContext());
     }
+
+    public UserResponse updateCurrentUser(RegisterUserRequest request) throws CustomForbiddenException, CustomNotFoundException {
+        boolean checkCurrentUser = AuthenticateService.checkCurrentUser();
+        if (!checkCurrentUser) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("can't access this api").field("user_status").build());
+        }
+
+        UserTbl currentUser = userRepository.findById(AuthenticateService.getCurrentUserFromSecurityContext().getUserId()).get();
+        currentUser.setFull_name(request.getFullName());
+        currentUser.setPhone(request.getPhone());
+        currentUser.setAvatar(request.getAvatar());
+        currentUser.setId_card(request.getId_card());
+        currentUser.setGender(request.getGender().toString());
+        currentUser.setBirthdate(request.getBirthdate());
+        currentUser.setTaxIdentification(request.getTaxIdentification());
+        currentUser.setAddress(request.getAddress());
+        currentUser.setBankName(request.getBankName());
+        currentUser.setBank_account(request.getBankAccount());
+        currentUser.setMomo(request.getMomo());
+
+        return new UserResponse(currentUser);
+    }
+
+    public PersonalWalletResponse getPersonalWallet(WalletTypeString walletTypeString) throws CustomForbiddenException, CustomNotFoundException {
+        boolean checkCurrentUser = AuthenticateService.checkCurrentUser();
+        if (!checkCurrentUser) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("can't access this api").field("user_status").build());
+        }
+        PersonalWallet personalWallet = getPersonalWallet(
+                AuthenticateService.getCurrentUserFromSecurityContext(),
+                walletTypeString
+        );
+        return new PersonalWalletResponse(personalWallet);
+    }
+
+
+    public PersonalWallet getPersonalWallet(UserTbl user, WalletTypeString walletTypeString) throws CustomNotFoundException {
+        PersonalWallet personalWallet = personalWalletRepository.findByPersonalwalletOf_UserIdAndWalletType_WalletTypeId(
+                user.getUserId(),
+                walletTypeString.toString()
+        )
+                .orElseThrow(() -> new CustomNotFoundException(
+                        CustomError.builder()
+                                .code("404").message("Personal wallet not found")
+                                .build()
+                ));
+        return personalWallet;
+    }
+
 }

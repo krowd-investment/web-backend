@@ -36,15 +36,29 @@ public interface UserController {
         public ResponseEntity<UserResponse> getCurrentUserInfo()
                         throws CustomNotFoundException, CustomForbiddenException;
 
+        @Operation(summary = "Update current logged in user information", description = "Update current logged in user information")
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "Update information successfully")
+        })
+        @PutMapping
+        public ResponseEntity<UserResponse> updateCurrentUser(@RequestBody RegisterUserRequest request)
+                throws CustomForbiddenException, CustomNotFoundException;
+
         // View GeneralWallet
         @Operation(summary = "View general wallet", description = "View general wallet")
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "Get general wallet successfully")
+        })
         @GetMapping("/general-wallet")
-        public ResponseEntity<PersonalWalletResponse> getGeneralWallet();
+        public ResponseEntity<PersonalWalletResponse> getGeneralWallet() throws CustomForbiddenException, CustomNotFoundException;
 
         // View CollectionWallet
         @Operation(summary = "View collection wallet", description = "View collection wallet")
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "Get collection wallet successfully")
+        })
         @GetMapping("/collection-wallet")
-        public ResponseEntity<PersonalWalletResponse> getCollectionWallet();
+        public ResponseEntity<PersonalWalletResponse> getCollectionWallet() throws CustomNotFoundException, CustomForbiddenException;
 
         // Deposit money to General Wallet
         @PutMapping("/deposit")

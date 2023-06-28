@@ -9,7 +9,7 @@ import com.swd392.funfundbe.model.Request.PersonalWalletTransactionRequest;
 import com.swd392.funfundbe.model.Request.RegisterUserRequest;
 import com.swd392.funfundbe.model.Response.PersonalWalletResponse;
 import com.swd392.funfundbe.model.Response.UserResponse;
-import com.swd392.funfundbe.model.enums.WalletType;
+import com.swd392.funfundbe.model.enums.WalletTypeString;
 import com.swd392.funfundbe.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,25 +41,22 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<PersonalWalletResponse> getGeneralWallet() {
-        PersonalWalletResponse response = new PersonalWalletResponse(
-                UUID.randomUUID(),
-                20,
-                WalletType.GENERAL_WALLET.toString(),
-                new BigDecimal(2000000),
-                new Date());
+    public ResponseEntity<UserResponse> updateCurrentUser(RegisterUserRequest request) throws CustomForbiddenException, CustomNotFoundException {
+        UserResponse userResponse = userService.updateCurrentUser(request);
+        return new ResponseEntity<>(
+                userResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<PersonalWalletResponse> getGeneralWallet() throws CustomForbiddenException, CustomNotFoundException {
+        PersonalWalletResponse response = userService.getPersonalWallet(WalletTypeString.GENERAL_WALLET);
         return new ResponseEntity<>(
                 response, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<PersonalWalletResponse> getCollectionWallet() {
-        PersonalWalletResponse response = new PersonalWalletResponse(
-                UUID.randomUUID(),
-                20,
-                WalletType.COLLECTION_WALLET.toString(),
-                new BigDecimal(2000000),
-                new Date());
+    public ResponseEntity<PersonalWalletResponse> getCollectionWallet() throws CustomNotFoundException, CustomForbiddenException {
+        PersonalWalletResponse response = userService.getPersonalWallet(WalletTypeString.COLLECTION_WALLET);
         return new ResponseEntity<>(
                 response, HttpStatus.OK);
     }

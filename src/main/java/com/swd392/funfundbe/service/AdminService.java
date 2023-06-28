@@ -6,6 +6,7 @@ import com.swd392.funfundbe.model.CustomError;
 import com.swd392.funfundbe.model.entity.UserTbl;
 import com.swd392.funfundbe.model.enums.LoginStatus;
 import com.swd392.funfundbe.model.enums.Role;
+import com.swd392.funfundbe.model.enums.WalletTypeString;
 import com.swd392.funfundbe.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdminService {
     private final UserRepository userRepository;
+    private final UserService userService;
 
     private UserTbl checkPOForConfirmation(Integer poId) throws CustomNotFoundException, CustomBadRequestException {
         String poRole = Role.PO.toString();
@@ -41,6 +43,8 @@ public class AdminService {
         UserTbl po = checkPOForConfirmation(poId);
         po.setStatus(LoginStatus.APPROVED);
         po.setEnabled(true);
+        userService.createWallet(po, WalletTypeString.GENERAL_WALLET);
+        userService.createWallet(po, WalletTypeString.COLLECTION_WALLET);
     }
 
     public void rejectPO(Integer poId) throws CustomNotFoundException, CustomBadRequestException {

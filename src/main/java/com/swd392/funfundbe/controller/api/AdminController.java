@@ -2,6 +2,7 @@ package com.swd392.funfundbe.controller.api;
 
 import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
+import com.swd392.funfundbe.model.Response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -9,6 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/api/admin")
 @Tag(name = "admin")
@@ -34,4 +37,15 @@ public interface AdminController {
     @PutMapping("/rejectPO")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> rejectPO(@RequestParam("poId") Integer poId) throws CustomNotFoundException, CustomBadRequestException;
+
+    @Operation(
+            summary = "Get all users",
+            description = "Get all users"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get all users successfully")
+    })
+    @GetMapping("/all-user")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<UserResponse>> getAllUsers();
 }
