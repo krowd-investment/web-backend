@@ -4,6 +4,7 @@ import com.swd392.funfundbe.controller.api.POController;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.CreateProjectRequest;
+import com.swd392.funfundbe.model.Response.ProjectResponse;
 import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
 import com.swd392.funfundbe.model.enums.WalletTypeString;
 import com.swd392.funfundbe.service.project.ProjectService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -68,4 +70,9 @@ public class POControllerImpl implements POController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<List<ProjectResponse>> getAllProjectOfCurrentPO() throws CustomNotFoundException {
+        List<ProjectResponse> projectResponses = projectService.getProjectOfCurrentUser();
+        return ResponseEntity.ok(projectResponses);
+    }
 }

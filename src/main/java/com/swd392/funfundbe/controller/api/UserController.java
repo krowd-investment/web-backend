@@ -1,6 +1,12 @@
 package com.swd392.funfundbe.controller.api;
 
-import com.google.firebase.messaging.Message;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
@@ -9,13 +15,12 @@ import com.swd392.funfundbe.model.Request.PersonalWalletTransactionRequest;
 import com.swd392.funfundbe.model.Request.RegisterUserRequest;
 import com.swd392.funfundbe.model.Response.PersonalWalletResponse;
 import com.swd392.funfundbe.model.Response.UserResponse;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/user")
 @Tag(name = "user")
@@ -38,27 +43,29 @@ public interface UserController {
 
         @Operation(summary = "Update current logged in user information", description = "Update current logged in user information")
         @ApiResponses(value = {
-                @ApiResponse(responseCode = "200", description = "Update information successfully")
+                        @ApiResponse(responseCode = "200", description = "Update information successfully")
         })
         @PutMapping("/update")
         public ResponseEntity<UserResponse> updateCurrentUser(@RequestBody RegisterUserRequest request)
-                throws CustomForbiddenException, CustomNotFoundException;
+                        throws CustomForbiddenException, CustomNotFoundException;
 
         // View GeneralWallet
         @Operation(summary = "View general wallet", description = "View general wallet")
         @ApiResponses(value = {
-                @ApiResponse(responseCode = "200", description = "Get general wallet successfully")
+                        @ApiResponse(responseCode = "200", description = "Get general wallet successfully")
         })
         @GetMapping("/general-wallet")
-        public ResponseEntity<PersonalWalletResponse> getGeneralWallet() throws CustomForbiddenException, CustomNotFoundException;
+        public ResponseEntity<PersonalWalletResponse> getGeneralWallet()
+                        throws CustomForbiddenException, CustomNotFoundException;
 
         // View CollectionWallet
         @Operation(summary = "View collection wallet", description = "View collection wallet")
         @ApiResponses(value = {
-                @ApiResponse(responseCode = "200", description = "Get collection wallet successfully")
+                        @ApiResponse(responseCode = "200", description = "Get collection wallet successfully")
         })
         @GetMapping("/collection-wallet")
-        public ResponseEntity<PersonalWalletResponse> getCollectionWallet() throws CustomNotFoundException, CustomForbiddenException;
+        public ResponseEntity<PersonalWalletResponse> getCollectionWallet()
+                        throws CustomNotFoundException, CustomForbiddenException;
 
         // Deposit money to General Wallet
         @PutMapping("/deposit")

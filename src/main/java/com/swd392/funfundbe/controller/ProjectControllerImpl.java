@@ -9,12 +9,15 @@ import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenExcep
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.AreaFilterRequest;
 import com.swd392.funfundbe.model.Request.FieldFilterRequest;
+import com.swd392.funfundbe.model.Request.ProjectStatusRequest;
 import com.swd392.funfundbe.model.Request.TargetCapitalFilterRequest;
 import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
 import com.swd392.funfundbe.service.project.ProjectService;
 
 import lombok.RequiredArgsConstructor;
+
+import java.math.BigDecimal;
 import java.util.*;;
 
 @RestController
@@ -37,21 +40,23 @@ public class ProjectControllerImpl implements ProjectController {
     }
 
     @Override
-    public ResponseEntity<List<ProjectResponse>> filterProject(AreaFilterRequest area) throws CustomForbiddenException, CustomNotFoundException {
+    public ResponseEntity<List<ProjectResponse>> filterProject(String area)
+            throws CustomForbiddenException, CustomNotFoundException {
         List<ProjectResponse> projectResponses = projectService.filterProjectByAreaName(area);
         return ResponseEntity.ok(projectResponses);
     }
 
     @Override
-    public ResponseEntity<List<ProjectResponse>> filterProjectByField(FieldFilterRequest filterRequest) throws CustomForbiddenException, CustomNotFoundException {
+    public ResponseEntity<List<ProjectResponse>> filterProjectByField(String filterRequest)
+            throws CustomForbiddenException, CustomNotFoundException {
         List<ProjectResponse> projectResponses = projectService.filterProjectByFieldName(filterRequest);
         return ResponseEntity.ok(projectResponses);
     }
 
     @Override
-    public ResponseEntity<List<ProjectResponse>> filterProjectByTarget(TargetCapitalFilterRequest target) throws CustomForbiddenException, CustomNotFoundException {
+    public ResponseEntity<List<ProjectResponse>> filterProjectByTarget(BigDecimal target)
+            throws CustomForbiddenException, CustomNotFoundException {
         List<ProjectResponse> projectResponses = projectService.filterProjectByTargetCapital(target);
         return ResponseEntity.ok(projectResponses);
     }
-
 }
