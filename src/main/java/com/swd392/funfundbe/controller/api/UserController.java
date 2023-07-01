@@ -24,7 +24,7 @@ public interface UserController {
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Register user successfully")
         })
-        @PostMapping
+        @PutMapping
         public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterUserRequest request)
                         throws CustomBadRequestException, CustomNotFoundException;
 
@@ -40,7 +40,7 @@ public interface UserController {
         @ApiResponses(value = {
                 @ApiResponse(responseCode = "200", description = "Update information successfully")
         })
-        @PutMapping
+        @PutMapping("/update")
         public ResponseEntity<UserResponse> updateCurrentUser(@RequestBody RegisterUserRequest request)
                 throws CustomForbiddenException, CustomNotFoundException;
 
