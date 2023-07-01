@@ -48,4 +48,27 @@ public interface AdminController {
     @GetMapping("/all-user")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<UserResponse>> getAllUsers();
+
+
+    @Operation(
+            summary = "Approve a project",
+            description = "Approve a project"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Approve project successfully")
+    })
+    @PutMapping("/approve-project")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> approveProject(@RequestParam("project_id") Integer projectId) throws CustomNotFoundException, CustomBadRequestException;
+
+    @Operation(
+            summary = "Reject a project",
+            description = "Reject a project"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reject project successfully")
+    })
+    @PutMapping("/reject-project")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> rejectProject(@RequestParam("project_id") Integer projectId) throws CustomNotFoundException, CustomBadRequestException;
 }

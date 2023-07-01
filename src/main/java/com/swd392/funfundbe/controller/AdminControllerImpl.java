@@ -1,5 +1,6 @@
 package com.swd392.funfundbe.controller;
 
+import com.google.api.Http;
 import com.swd392.funfundbe.controller.api.AdminController;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
@@ -35,5 +36,17 @@ public class AdminControllerImpl implements AdminController {
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> list = userService.getAllUsers();
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> approveProject(Integer projectId) throws CustomNotFoundException, CustomBadRequestException {
+        adminService.approveProject(projectId);
+        return new ResponseEntity<>("Approve project successfully", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> rejectProject(Integer projectId) throws CustomNotFoundException, CustomBadRequestException {
+        adminService.rejectProject(projectId);
+        return new ResponseEntity<>("Reject project successfully", HttpStatus.OK);
     }
 }
