@@ -1,20 +1,24 @@
 package com.swd392.funfundbe.controller.api;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.swd392.funfundbe.controller.api.exception.custom.CustomUnauthorizedException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.AreaFilterRequest;
 import com.swd392.funfundbe.model.Request.FieldFilterRequest;
+import com.swd392.funfundbe.model.Request.ProjectStatusRequest;
 import com.swd392.funfundbe.model.Request.TargetCapitalFilterRequest;
 import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
@@ -35,20 +39,20 @@ public interface ProjectController {
                         throws CustomForbiddenException, CustomNotFoundException;
 
         @Operation(summary = "filter project by area")
-        @PostMapping("/filterByAreaName")
+        @GetMapping("/filterByAreaName")
         public ResponseEntity<List<ProjectResponse>> filterProject(
-                        @RequestBody AreaFilterRequest area) throws CustomForbiddenException, CustomNotFoundException;
+                        @RequestParam String area) throws CustomForbiddenException, CustomNotFoundException;
 
         @Operation(summary = "filter project by filed")
-        @PostMapping("/filterByField")
+        @GetMapping("/filterByField")
         public ResponseEntity<List<ProjectResponse>> filterProjectByField(
-                        @RequestBody FieldFilterRequest filterRequest)
+                        @RequestParam String field)
                         throws CustomForbiddenException, CustomNotFoundException;
 
         @Operation(summary = "filter project by target")
-        @PostMapping("/filterByTarget")
+        @GetMapping("/filterByTarget")
         public ResponseEntity<List<ProjectResponse>> filterProjectByTarget(
-                        @RequestBody TargetCapitalFilterRequest target)
+                        @RequestParam BigDecimal target)
                         throws CustomForbiddenException, CustomNotFoundException;
 
 }

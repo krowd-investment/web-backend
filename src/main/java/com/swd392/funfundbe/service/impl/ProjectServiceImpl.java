@@ -91,7 +91,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectResponse> filterProjectByAreaName(AreaFilterRequest area)
+    public List<ProjectResponse> filterProjectByAreaName(String area)
             throws CustomForbiddenException, CustomNotFoundException {
         boolean check = AuthenticateService.checkCurrentUser();
         if (!check) {
@@ -102,7 +102,7 @@ public class ProjectServiceImpl implements ProjectService {
         List<ProjectResponse> projectResponses = new ArrayList<>();
         for (Project p : projects) {
             String areaNameCheck = buildString(p.getArea().getCity(), p.getArea().getDistrict());
-            boolean chck = areaNameCheck.toLowerCase().contains(area.getAreaName().trim().toLowerCase());
+            boolean chck = areaNameCheck.toLowerCase().contains(area.trim().toLowerCase());
             if (chck && p.getStatus().equalsIgnoreCase("APPROVED")) {
                 ProjectResponse projectResponse = ObjectMapper.fromProjectToProjectResponse(p);
                 projectResponse.setFieldName(p.getField().getName());
@@ -115,7 +115,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectResponse> filterProjectByFieldName(FieldFilterRequest field)
+    public List<ProjectResponse> filterProjectByFieldName(String field)
             throws CustomForbiddenException, CustomNotFoundException {
         boolean check = AuthenticateService.checkCurrentUser();
         if (!check) {
@@ -126,7 +126,7 @@ public class ProjectServiceImpl implements ProjectService {
         List<ProjectResponse> projectResponses = new ArrayList<>();
         for (Project p : projects) {
             String fieldCheck = p.getField().getName();
-            boolean chck = fieldCheck.toLowerCase().contains(field.getFieldName().trim().toLowerCase());
+            boolean chck = fieldCheck.toLowerCase().contains(field.trim().toLowerCase());
             if (chck && p.getStatus().equalsIgnoreCase("APPROVED")) {
                 ProjectResponse projectResponse = ObjectMapper.fromProjectToProjectResponse(p);
                 projectResponse.setFieldName(p.getField().getName());
@@ -139,7 +139,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectResponse> filterProjectByTargetCapital(TargetCapitalFilterRequest target)
+    public List<ProjectResponse> filterProjectByTargetCapital(BigDecimal target)
             throws CustomForbiddenException, CustomNotFoundException {
         boolean check = AuthenticateService.checkCurrentUser();
         if (!check) {
@@ -150,7 +150,7 @@ public class ProjectServiceImpl implements ProjectService {
         List<ProjectResponse> projectResponses = new ArrayList<>();
         for (Project p : projects) {
             BigDecimal targetCheck = p.getInvestmentTargetCapital();
-            boolean chck = targetCheck.doubleValue() == target.getTarget().doubleValue();
+            boolean chck = targetCheck.doubleValue() == target.doubleValue();
             if (chck && p.getStatus().equalsIgnoreCase("APPROVED")) {
                 ProjectResponse projectResponse = ObjectMapper.fromProjectToProjectResponse(p);
                 projectResponse.setFieldName(p.getField().getName());
@@ -198,11 +198,74 @@ public class ProjectServiceImpl implements ProjectService {
                 .investedCapital(new BigDecimal(0))
                 .status(ProjectStatus.PENDING.toString())
                 .createAt(new Date())
+                .projectCreatedBy(user)
                 .build();
         Project save = projectRepository.save(project);
         if (save == null) {
             return "Create new project failed";
         }
         return "Create new project successfully";
+    }
+
+    @Override
+    public List<ProjectResponse> getAllProjectByStatus(String status)
+            throws CustomNotFoundException, CustomForbiddenException {
+        if (!AuthenticateService.getCurrentUserFromSecurityContext().getRole().getRoleName()
+                .equalsIgnoreCase("ADMIN")) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("You can't access this feature").build());
+        }
+        if (!AuthenticateService.checkCurrentUser()) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("You can't access this feature").build());
+        }
+        if (status == null) {
+            List<Project> projects = projectRepository.findAll();
+            List<ProjectResponse> projectResponseList = projects.stream().map(p -> {
+                String areaCity = areaRepository.findByAreaId(p.getArea().getAreaId()).getCity();
+                String areaDistrict = areaRepository.findByAreaId(p.getArea().getAreaId()).getDistrict();
+                String areaName = areaCity + "-" + areaDistrict;
+                String filedName = fieldRepository.findByFieldId(p.getField().getFieldId()).getName();
+                ProjectResponse projectResponse = ObjectMapper
+                        .fromProjectToProjectResponse(p);
+                projectResponse.setAreaName(areaName);
+                projectResponse.setFieldName(filedName);
+                return projectResponse;
+            }).toList();
+            return projectResponseList;
+        }
+        List<Project> projectList = projectRepository.findAll().stream()
+                .filter(x -> x.getStatus().equalsIgnoreCase(status)).toList();
+        List<ProjectResponse> projectResponses = projectList.stream().map(p -> {
+            String areaCity = areaRepository.findByAreaId(p.getArea().getAreaId()).getCity();
+            String areaDistrict = areaRepository.findByAreaId(p.getArea().getAreaId()).getDistrict();
+            String areaName = areaCity + "-" + areaDistrict;
+            String filedName = fieldRepository.findByFieldId(p.getField().getFieldId()).getName();
+            ProjectResponse projectResponse = ObjectMapper
+                    .fromProjectToProjectResponse(p);
+            projectResponse.setAreaName(areaName);
+            projectResponse.setFieldName(filedName);
+            return projectResponse;
+        }).toList();
+        return projectResponses;
+    }
+
+    @Override
+    public List<ProjectResponse> getProjectOfCurrentUser() throws CustomNotFoundException {
+        UserTbl user = AuthenticateService.getCurrentUserFromSecurityContext();
+        List<Project> projects = projectRepository.findAll().stream()
+                .filter(x -> x.getProjectCreatedBy().getUserId() == user.getUserId()).toList();
+        List<ProjectResponse> projectResponses = projects.stream().map(p -> {
+            String areaCity = areaRepository.findByAreaId(p.getArea().getAreaId()).getCity();
+            String areaDistrict = areaRepository.findByAreaId(p.getArea().getAreaId()).getDistrict();
+            String areaName = areaCity + "-" + areaDistrict;
+            String filedName = fieldRepository.findByFieldId(p.getField().getFieldId()).getName();
+            ProjectResponse projectResponse = ObjectMapper
+                    .fromProjectToProjectResponse(p);
+            projectResponse.setAreaName(areaName);
+            projectResponse.setFieldName(filedName);
+            return projectResponse;
+        }).toList();
+        return projectResponses;
     }
 }
