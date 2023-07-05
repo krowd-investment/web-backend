@@ -52,7 +52,9 @@ import java.io.IOException;
 			@Tag(name = "admin", description = "REST API endpoints for admin"),
 			@Tag(name = "project owner", description = "REST API endpoints for PO"),
 			@Tag(name = "project", description = "REST API endpoints for projects"),
-			@Tag(name = "investment", description = "REST API endpoints for invest projects")
+			@Tag(name = "investment", description = "REST API endpoints for investing projects"),
+			@Tag(name = "area", description = "REST API endpoints for areas of projects"),
+			@Tag(name = "field", description = "REST API endpoints for field of projects")
 
 	}
 )

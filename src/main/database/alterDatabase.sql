@@ -27,3 +27,26 @@ alter table [Stage]
 -- updated by Tien
 insert into PersonalWallet (wallet_id, wallet_type_id, balance, created_at)
 values ('e7e98621-b16a-4226-a31d-bdf7b8cf0dc2', 'SYSTEM_WALLET', 0, GETDATE())
+
+-- updated by Tien on 5/7/2023
+insert into Field (name, field_description, status)
+values
+('Drink', 'Drink field', 1),
+('Food', 'Food field', 1),
+('Medical', 'Medical field', 1),
+('Studying', 'Studying field', 1),
+('Technology', 'Technology field', 1),
+('Real Estate', 'Real Estate field', 1)
+
+insert into Area (city, district, details, status)
+values
+('HCM', 'Q1', 'Ho Chi Minh', 1),
+('HCM', 'Q3', 'Ho Chi Minh', 1),
+('HCM', 'Q4', 'Ho Chi Minh', 1),
+('HCM', 'Q5', 'Ho Chi Minh', 1),
+('HCM', 'Q6', 'Ho Chi Minh', 1),
+('HCM', 'Q7', 'Ho Chi Minh', 1),
+('HCM', 'Q8', 'Ho Chi Minh', 1),
+('HCM', 'Q10', 'Ho Chi Minh', 1),
+('HCM', 'Q11', 'Ho Chi Minh', 1),
+('HCM', 'Q12', 'Ho Chi Minh', 1)

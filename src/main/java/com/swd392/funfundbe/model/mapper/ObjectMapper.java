@@ -4,9 +4,9 @@ import java.util.Date;
 
 import com.swd392.funfundbe.model.Request.CreateProjectRequest;
 import com.swd392.funfundbe.model.Request.InvestProjectRequest;
-import com.swd392.funfundbe.model.Response.InvestedProjectResponse;
-import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
-import com.swd392.funfundbe.model.Response.ProjectResponse;
+import com.swd392.funfundbe.model.Response.*;
+import com.swd392.funfundbe.model.entity.Area;
+import com.swd392.funfundbe.model.entity.Field;
 import com.swd392.funfundbe.model.entity.Investment;
 import com.swd392.funfundbe.model.entity.Project;
 
@@ -57,5 +57,28 @@ public class ObjectMapper {
                 .updatedAt(request.getCreateAt())
                 .contract("")
                 .status(request.getStatus()).build();
+    }
+
+    public static FieldResponse fromFieldToFieldResponse(Field field) {
+        if (field == null) return null;
+        FieldResponse fieldResponse = FieldResponse.builder()
+                .fieldId(field.getFieldId())
+                .name(field.getName())
+                .fieldDescription(field.getFieldDescription())
+                .status(field.isStatus())
+                .build();
+        return fieldResponse;
+    }
+
+    public static AreaResponse fromAreaToAreaResponse(Area area) {
+        if (area == null) return null;
+        AreaResponse areaResponse = AreaResponse.builder()
+                .areaId(area.getAreaId())
+                .city(area.getCity())
+                .district(area.getDistrict())
+                .details(area.getDetails())
+                .status(area.isStatus())
+                .build();
+        return areaResponse;
     }
 }
