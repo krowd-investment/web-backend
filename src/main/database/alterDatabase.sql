@@ -50,3 +50,7 @@ values
 ('HCM', 'Q10', 'Ho Chi Minh', 1),
 ('HCM', 'Q11', 'Ho Chi Minh', 1),
 ('HCM', 'Q12', 'Ho Chi Minh', 1)
+
+-- updated by Tien on 6/7/2023
+alter table Project
+alter column project_description text
