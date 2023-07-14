@@ -10,3 +10,8 @@ spring:
 server:
   error:
     include-message: always
+
+momo:
+  web-redirect-url: ${DEV_SERVER_DOMAIN}/api/payment/momo/result
+  mobile-redirect-url: mobile
+  ipn-url: ${DEV_SERVER_DOMAIN}/api/payment/momo/result

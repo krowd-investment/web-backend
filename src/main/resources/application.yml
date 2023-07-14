@@ -17,7 +17,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect
-        show_sql: true
+#        show_sql: true
         format_sql: true
     hibernate:
       ddl-auto: validate
@@ -37,6 +37,16 @@ springdoc:
 #  refresh-secret-key: ${JWT_REFRESH_SECRET_KEY}
 #  access-expire-time-in-minutes: 30
 #  refresh-expire-time-in-minutes: 1440
+
+momo:
+  payment-url: https://test-payment.momo.vn/v2/gateway/api/create
+  access-key: ${MOMO_ACCESS_KEY}
+  secret-key: ${MOMO_SECRET_KEY}
+  partner-code: ${MOMO_PARTNER_CODE}
+  order-info: Deposit to FunFund Krowd-investment platform
+  request-type: captureWallet
+  extra-data: ew0KImVtYWlsIjogImh1b25neGRAZ21haWwuY29tIg0KfQ==
+  lang: en
 
 server:
   port: 8080
