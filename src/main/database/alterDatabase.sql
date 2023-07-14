@@ -54,3 +54,18 @@ values
 -- updated by Tien on 6/7/2023
 alter table Project
 alter column project_description text
+
+-- updated by Tien on 14/7/2023
+create table DepositTransaction(
+    deposit_transaction_id int Identity(1, 1),
+    to_wallet_id uniqueidentifier,
+    created_by int,
+    created_at datetime not null,
+    amount decimal not null,
+    order_id varchar(255) not null,
+    verified bit not null default 0,
+    Primary Key(deposit_transaction_id),
+    Foreign Key(to_wallet_id) references PersonalWallet(wallet_id),
+    Foreign Key(created_by) references [Usertbl]([user_id])
+)
+

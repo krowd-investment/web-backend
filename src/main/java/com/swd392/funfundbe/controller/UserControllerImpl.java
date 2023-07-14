@@ -10,6 +10,7 @@ import com.swd392.funfundbe.model.Request.RegisterUserRequest;
 import com.swd392.funfundbe.model.Response.PersonalWalletResponse;
 import com.swd392.funfundbe.model.Response.UserResponse;
 import com.swd392.funfundbe.model.enums.WalletTypeString;
+import com.swd392.funfundbe.service.PaymentService;
 import com.swd392.funfundbe.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserControllerImpl implements UserController {
     private final UserService userService;
+    private final PaymentService paymentService;
 
     @Override
     public ResponseEntity<UserResponse> registerUser(RegisterUserRequest request)
@@ -62,8 +64,9 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<?> depositToGeneralWallet() {
-        return new ResponseEntity<>("Under development", HttpStatus.OK);
+    public ResponseEntity<?> depositToGeneralWallet(String platform, BigDecimal amount) throws CustomNotFoundException, CustomBadRequestException, CustomForbiddenException {
+        Object response = paymentService.depositToGeneralWallet(platform, amount);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override

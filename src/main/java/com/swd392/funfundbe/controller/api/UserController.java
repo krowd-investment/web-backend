@@ -1,11 +1,8 @@
 package com.swd392.funfundbe.controller.api;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
@@ -21,6 +18,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+
+import java.math.BigDecimal;
 
 @RequestMapping("/api/user")
 @Tag(name = "user")
@@ -68,8 +67,15 @@ public interface UserController {
                         throws CustomNotFoundException, CustomForbiddenException;
 
         // Deposit money to General Wallet
+        @Operation(summary = "Deposit to general wallet by Momo", description = "Deposit to general wallet by Momo")
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "Call Momo payment successfully")
+        })
         @PutMapping("/deposit")
-        public ResponseEntity<?> depositToGeneralWallet();
+        public ResponseEntity<?> depositToGeneralWallet(
+                @RequestParam("platform") @Schema(description = "WEB or MOBILE", example = "WEB") String platform,
+                @RequestParam("amount") BigDecimal amount
+        ) throws CustomNotFoundException, CustomBadRequestException, CustomForbiddenException;
 
         // Withdraw money from General Wallet or Collection Wallet
         @PutMapping("/withdraw")
