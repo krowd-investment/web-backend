@@ -75,7 +75,8 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<?> transferMoney(PersonalWalletTransactionRequest request) {
+    public ResponseEntity<?> transferMoney(PersonalWalletTransactionRequest request) throws CustomNotFoundException, CustomBadRequestException, CustomForbiddenException {
+        userService.transferMoney(request);
         return new ResponseEntity<>("Transfer money successfully", HttpStatus.OK);
     }
 

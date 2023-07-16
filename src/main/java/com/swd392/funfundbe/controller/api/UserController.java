@@ -84,7 +84,7 @@ public interface UserController {
         // Transfer money between personal wallets
         @Operation(summary = "Transfer money between personal wallets", description = "Transfer money between personal wallets")
         @PutMapping("/transfer-money")
-        public ResponseEntity<?> transferMoney(@RequestBody @Valid PersonalWalletTransactionRequest request);
+        public ResponseEntity<?> transferMoney(@RequestBody @Valid PersonalWalletTransactionRequest request) throws CustomNotFoundException, CustomBadRequestException, CustomForbiddenException;
 
         @Operation(summary = "logout")
         @PostMapping("/logout")
