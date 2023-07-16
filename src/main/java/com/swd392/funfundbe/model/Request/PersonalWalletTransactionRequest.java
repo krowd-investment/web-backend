@@ -1,5 +1,6 @@
 package com.swd392.funfundbe.model.Request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -12,9 +13,11 @@ import java.util.UUID;
 @Setter
 public class PersonalWalletTransactionRequest {
     @NotNull
-    private UUID fromWalletId;
+    @Schema(example = "COLLECTION_WALLET")
+    private String fromWallet;
     @NotNull
-    private UUID toWalletId;
+    @Schema(example = "GENERAL_WALLET")
+    private String toWallet;
     @NotNull
     private BigDecimal amount;
     private String description;

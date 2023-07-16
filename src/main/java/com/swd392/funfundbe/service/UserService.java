@@ -10,23 +10,18 @@ import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestExce
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.CustomError;
+import com.swd392.funfundbe.model.Request.PersonalWalletTransactionRequest;
 import com.swd392.funfundbe.model.Response.PersonalWalletResponse;
-import com.swd392.funfundbe.model.entity.PersonalWallet;
-import com.swd392.funfundbe.model.entity.WalletType;
+import com.swd392.funfundbe.model.entity.*;
 import com.swd392.funfundbe.model.enums.WalletTypeString;
-import com.swd392.funfundbe.repository.PersonalWalletRepository;
-import com.swd392.funfundbe.repository.WalletTypeRepository;
+import com.swd392.funfundbe.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.swd392.funfundbe.model.Request.RegisterUserRequest;
 import com.swd392.funfundbe.model.Response.UserResponse;
-import com.swd392.funfundbe.model.entity.RoleTbl;
-import com.swd392.funfundbe.model.entity.UserTbl;
 import com.swd392.funfundbe.model.enums.LoginStatus;
 import com.swd392.funfundbe.model.enums.Role;
-import com.swd392.funfundbe.repository.RoleRepository;
-import com.swd392.funfundbe.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,6 +34,7 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final WalletTypeRepository walletTypeRepository;
     private final PersonalWalletRepository personalWalletRepository;
+    private final PWalletTransactionRepository pWalletTransactionRepository;
 
     public UserTbl getUserByEmail(String email) {
         Optional<UserTbl> isExistUser = userRepository.findByEmail(email);
@@ -204,4 +200,51 @@ public class UserService {
         return personalWallet;
     }
 
+    public void transferMoney(PersonalWalletTransactionRequest request) throws CustomBadRequestException, CustomNotFoundException, CustomForbiddenException {
+        if (!request.getFromWallet().equals(WalletTypeString.GENERAL_WALLET.toString())
+                && !request.getFromWallet().equals(WalletTypeString.COLLECTION_WALLET.toString()))
+            throw new CustomBadRequestException(
+                CustomError.builder().message("Invalid FromWallet type").build()
+            );
+        if (!request.getToWallet().equals(WalletTypeString.GENERAL_WALLET.toString())
+                && !request.getToWallet().equals(WalletTypeString.COLLECTION_WALLET.toString()))
+            throw new CustomBadRequestException(
+                    CustomError.builder().message("Invalid FromWallet type").build()
+            );
+
+        if (request.getAmount().longValue() <= 50000)
+            throw new CustomBadRequestException(
+                    CustomError.builder().message("Must transfer at least 50.000 vnd").build()
+            );
+
+        UserTbl userTbl = AuthenticateService.getCurrentUserFromSecurityContext();
+        if (!userTbl.isEnabled()) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("can't access this api").field("user_status").build());
+        }
+
+        PersonalWallet fromWallet = getPersonalWallet(userTbl, WalletTypeString.valueOf(request.getFromWallet()));
+        PersonalWallet toWallet = getPersonalWallet(userTbl, WalletTypeString.valueOf(request.getToWallet()));
+
+        if (request.getAmount().longValue() > fromWallet.getBalance().longValue())
+            throw new CustomBadRequestException(
+                    CustomError.builder().message(
+                            "Don't have enough " + request.getAmount() + " vnd in " + fromWallet.getWalletType().getWalleTypeName()
+                    ).build()
+            );
+
+        fromWallet.setBalance(fromWallet.getBalance().subtract(request.getAmount()));
+        toWallet.setBalance(toWallet.getBalance().add(request.getAmount()));
+
+        PersonalWalletTransaction personalWalletTransaction = PersonalWalletTransaction.builder()
+                .fromWallet(fromWallet)
+                .toWallet(toWallet)
+                .pWTransactionrcreatedBy(userTbl)
+                .createdAt(new Date())
+                .amount(request.getAmount())
+                .fee(BigDecimal.ZERO)
+                .personalWalletDescription(request.getDescription())
+                .build();
+        pWalletTransactionRepository.save(personalWalletTransaction);
+    }
 }
