@@ -51,6 +51,12 @@ public class AdminService {
                             .code("400")
                             .message("PO has been banned").build()
             );
+        if (po.getStatus().equals(LoginStatus.APPROVED))
+            throw new CustomBadRequestException(
+                    CustomError.builder()
+                            .code("400")
+                            .message("PO has been approved").build()
+            );
         return po;
     }
     public void approvePO(Integer poId) throws CustomNotFoundException, CustomBadRequestException {
