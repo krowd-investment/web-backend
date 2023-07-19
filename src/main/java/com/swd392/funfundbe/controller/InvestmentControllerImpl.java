@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.swd392.funfundbe.controller.api.InvestmentController;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.InvestProjectRequest;
@@ -29,7 +30,7 @@ public class InvestmentControllerImpl implements InvestmentController {
 
     @Override
     public ResponseEntity<InvestedProjectResponse> investProject(InvestProjectRequest request)
-            throws CustomNotFoundException, CustomForbiddenException {
+            throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException {
         InvestedProjectResponse investedProjectResponse = investmentService.investProject(request);
         return ResponseEntity.ok(investedProjectResponse);
     }
