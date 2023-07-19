@@ -7,6 +7,7 @@ import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenExcep
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomUnauthorizedException;
 import com.swd392.funfundbe.model.Request.CreateProjectRequest;
+import com.swd392.funfundbe.model.Request.UpdateProjectRequest;
 import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
 import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
@@ -36,5 +37,8 @@ public interface ProjectService {
 
         public List<ProjectResponse> getProjectOfCurrentUser() throws CustomNotFoundException;
 
-        public ProjectWalletResponse getProjectWalletResponse(int projectId, WalletTypeString walletTypeString) throws CustomNotFoundException, CustomForbiddenException;
+        public ProjectWalletResponse getProjectWalletResponse(int projectId, WalletTypeString walletTypeString)
+                throws CustomNotFoundException, CustomForbiddenException;
+        public String updateProject(int id, UpdateProjectRequest request)
+                        throws CustomNotFoundException, CustomForbiddenException;
 }

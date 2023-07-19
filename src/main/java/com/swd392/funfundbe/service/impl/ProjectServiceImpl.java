@@ -19,6 +19,7 @@ import com.swd392.funfundbe.model.Request.AreaFilterRequest;
 import com.swd392.funfundbe.model.Request.CreateProjectRequest;
 import com.swd392.funfundbe.model.Request.FieldFilterRequest;
 import com.swd392.funfundbe.model.Request.TargetCapitalFilterRequest;
+import com.swd392.funfundbe.model.Request.UpdateProjectRequest;
 import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
 import com.swd392.funfundbe.model.enums.ProjectStatus;
@@ -51,7 +52,10 @@ public class ProjectServiceImpl implements ProjectService {
                     CustomError.builder().code("404").message("not found any project list").field("project").build());
         }
         List<Project> projectApproved = projectList.stream()
-                .filter(p -> p.getStatus().equalsIgnoreCase(ProjectStatus.APPROVED.toString())).toList();
+                .filter(p -> p.getStatus().equalsIgnoreCase(ProjectStatus.APPROVED.toString())
+                        || p.getStatus().equalsIgnoreCase(ProjectStatus.READY.toString())
+                        || p.getStatus().equalsIgnoreCase(ProjectStatus.DONE.toString()))
+                .toList();
         List<ProjectResponse> projectResponseList = projectApproved.stream().map(p -> {
             String areaCity = areaRepository.findByAreaId(p.getArea().getAreaId()).getCity();
             String areaDistrict = areaRepository.findByAreaId(p.getArea().getAreaId()).getDistrict();
@@ -179,11 +183,11 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = Project.builder().field(field).area(area).projectName(projectRequest.getProjectName())
                 .projectCreatedBy(user)
                 .brand(projectRequest.getBrand())
-                .investedCapital(projectRequest.getInvestedCapital())
+                .investedCapital(new BigDecimal(0))
                 .investmentTargetCapital(projectRequest.getInvestmentTargetCapital())
                 .sharedRevenue(projectRequest.getSharedRevenue())
                 .multiplier(projectRequest.getMultiplier())
-                .numberOfStage(0)
+                .numberOfStage(projectRequest.getNumberOfStage())
                 .duration(projectRequest.getDuration())
                 .startDate(projectRequest.getStartDate())
                 .endDate(projectRequest.getEndDate())
@@ -287,10 +291,53 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     private ProjectWallet getProjectWallet(int projectId, WalletTypeString walletTypeString) throws CustomNotFoundException {
-        ProjectWallet projectWallet = projectWalletRepository.findByProject_ProjectIdAndWalletType_WalletTypeId(
-                projectId,
-                walletTypeString.toString()
-        ).orElseThrow(() -> new CustomNotFoundException(CustomError.builder().message("Project wallet not found with such project ID").build()));
+        ProjectWallet projectWallet = projectWalletRepository.findByProject_ProjectIdAndWalletType_WalletTypeId(projectId, walletTypeString.toString())
+                .orElseThrow(() -> new CustomNotFoundException(
+                        CustomError.builder().message("Project wallet not found with such project ID").build()));
         return projectWallet;
+    }
+    public String updateProject(int id, UpdateProjectRequest request)
+            throws CustomNotFoundException, CustomForbiddenException {
+        if (!AuthenticateService.getCurrentUserFromSecurityContext().getRole().getRoleId()
+                .equals(Role.PO.toString())) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("can not access this feature").build());
+        }
+        Project project = projectRepository.findByProjectId(id);
+        if (project == null) {
+            throw new CustomNotFoundException(
+                    CustomError.builder().code("404").message("not found project matched id").build());
+        }
+        Area area = areaRepository.findByAreaId(request.getAreaId());
+        if (area != null) {
+            project.setArea(area);
+        }
+        Field field = fieldRepository.findByFieldId(request.getFieldId());
+        if (field != null) {
+            project.setField(field);
+        }
+        UserTbl user = AuthenticateService.getCurrentUserFromSecurityContext();
+        project.setBusinessLicense(request.getBusinessLicense());
+        project.setBrand(request.getBrand());
+        project.setDuration(request.getDuration());
+        project.setImage(request.getImage());
+        project.setInvestedCapital(request.getInvestedCapital());
+        project.setInvestmentTargetCapital(request.getInvestmentTargetCapital());
+        project.setMultiplier(project.getMultiplier());
+        project.setNumberOfStage(request.getNumberOfStage());
+        project.setPaidAmount(request.getPaidAmount());
+        project.setProjectDescription(request.getProjectDescription());
+        project.setStartDate(request.getStartDate());
+        project.setEndDate(request.getEndDate());
+        project.setProjectName(request.getProjectName());
+        project.setRemainingAmount(request.getRemainingAmount());
+        project.setProjectUpdatedBy(user);
+        project.setStatus(request.getStatus());
+        project.setSharedRevenue(request.getSharedRevenue());
+        projectRepository.save(project);
+        if (project != null) {
+            return "Update successfully";
+        }
+        return "Update failed";
     }
 }

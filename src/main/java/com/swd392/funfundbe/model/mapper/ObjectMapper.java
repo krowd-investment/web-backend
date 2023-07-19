@@ -32,6 +32,12 @@ public class ObjectMapper {
                 .endDate(project.getEndDate())
                 .startDate(project.getStartDate())
                 .status(project.getStatus())
+                .numberOfStage(project.getNumberOfStage())
+                .projectDescription(project.getProjectDescription())
+                .investmentTargetCapital(project.getInvestmentTargetCapital())
+                .paidAmount(project.getPaidAmount())
+                .remainingAmount(project.getRemainingAmount())
+                .businessLicense(project.getBusinessLicense())
                 .build();
     }
 
@@ -57,7 +63,8 @@ public class ObjectMapper {
     }
 
     public static FieldResponse fromFieldToFieldResponse(Field field) {
-        if (field == null) return null;
+        if (field == null)
+            return null;
         FieldResponse fieldResponse = FieldResponse.builder()
                 .fieldId(field.getFieldId())
                 .name(field.getName())
@@ -68,7 +75,8 @@ public class ObjectMapper {
     }
 
     public static AreaResponse fromAreaToAreaResponse(Area area) {
-        if (area == null) return null;
+        if (area == null)
+            return null;
         AreaResponse areaResponse = AreaResponse.builder()
                 .areaId(area.getAreaId())
                 .city(area.getCity())

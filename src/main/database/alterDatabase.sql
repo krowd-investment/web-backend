@@ -51,6 +51,10 @@ values
 ('HCM', 'Q11', 'Ho Chi Minh', 1),
 ('HCM', 'Q12', 'Ho Chi Minh', 1)
 
+-- updated by Tien on 6/7/2023
+alter table Project
+alter column project_description text
+
 -- updated by Tien on 14/7/2023
 create table DepositTransaction(
     deposit_transaction_id int Identity(1, 1),
@@ -64,3 +68,4 @@ create table DepositTransaction(
     Foreign Key(to_wallet_id) references PersonalWallet(wallet_id),
     Foreign Key(created_by) references [Usertbl]([user_id])
 )
+

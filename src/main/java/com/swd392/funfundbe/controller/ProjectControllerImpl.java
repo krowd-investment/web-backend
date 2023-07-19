@@ -14,6 +14,7 @@ import com.swd392.funfundbe.model.Request.AreaFilterRequest;
 import com.swd392.funfundbe.model.Request.FieldFilterRequest;
 import com.swd392.funfundbe.model.Request.ProjectStatusRequest;
 import com.swd392.funfundbe.model.Request.TargetCapitalFilterRequest;
+import com.swd392.funfundbe.model.Request.UpdateProjectRequest;
 import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
 import com.swd392.funfundbe.service.project.ProjectService;
@@ -74,10 +75,14 @@ public class ProjectControllerImpl implements ProjectController {
 
     @Override
     public ResponseEntity<ProjectWalletResponse> getProjectPaymentWallet(int projectId) throws CustomNotFoundException, CustomForbiddenException {
-        ProjectWalletResponse projectWalletResponse = projectService.getProjectWalletResponse(
-                projectId,
-                WalletTypeString.PROJECT_PAYMENT_WALLET
-        );
+        ProjectWalletResponse projectWalletResponse = projectService.getProjectWalletResponse(projectId, WalletTypeString.PROJECT_PAYMENT_WALLET);
         return new ResponseEntity<>(projectWalletResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> updateProject(int id, UpdateProjectRequest request)
+            throws CustomNotFoundException, CustomForbiddenException {
+        String result = projectService.updateProject(id, request);
+        return ResponseEntity.ok(result);
     }
 }
