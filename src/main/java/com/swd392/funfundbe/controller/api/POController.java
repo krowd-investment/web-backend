@@ -48,17 +48,6 @@ public interface POController {
         @PutMapping("/project/start/{project_id}")
         public ResponseEntity<?> startProject(@PathVariable("project_id") int projectId);
 
-        // View ProjectInvestmentWallet
-        @Operation(summary = "PO view project-investment-wallet", description = "PO view project-investment-wallet of owned project")
-        @GetMapping("project/{project_id}/project-investment-wallet")
-        public ResponseEntity<ProjectWalletResponse> getProjectInvestmentWallet(
-                        @PathVariable("project_id") int projectId);
-
-        // View ProjectPaymentWallet
-        @Operation(summary = "PO view payment-investment-wallet", description = "PO view payment-investment-wallet of owned project")
-        @GetMapping("project/{project_id}/project-payment-wallet")
-        public ResponseEntity<ProjectWalletResponse> getProjectPaymentWallet(@PathVariable("project_id") int projectId);
-
         // Transact money from GeneralWallet to ProjectPaymentWallet
 
         // Insert period report

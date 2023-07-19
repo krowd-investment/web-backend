@@ -3,6 +3,7 @@ package com.swd392.funfundbe.controller.api;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -54,5 +55,21 @@ public interface ProjectController {
         public ResponseEntity<List<ProjectResponse>> filterProjectByTarget(
                         @RequestParam BigDecimal target)
                         throws CustomForbiddenException, CustomNotFoundException;
+
+        // View ProjectInvestmentWallet
+        @Operation(summary = "View project-investment-wallet", description = "View project-investment-wallet of specific project")
+        @GetMapping("/{project_id}/project-investment-wallet")
+        @PreAuthorize("hasAnyAuthority('ADMIN', 'PO')")
+        public ResponseEntity<ProjectWalletResponse> getProjectInvestmentWallet(
+                @PathVariable("project_id") int projectId) throws CustomNotFoundException, CustomForbiddenException;
+
+        // View ProjectPaymentWallet
+        @Operation(summary = "View payment-investment-wallet", description = "View payment-investment-wallet of specific project")
+        @GetMapping("/{project_id}/project-payment-wallet")
+        @PreAuthorize("hasAnyAuthority('ADMIN', 'PO')")
+        public ResponseEntity<ProjectWalletResponse> getProjectPaymentWallet(
+                @PathVariable("project_id") int projectId) throws CustomNotFoundException, CustomForbiddenException;
+
+
 
 }

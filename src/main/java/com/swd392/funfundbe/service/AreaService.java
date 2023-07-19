@@ -1,7 +1,11 @@
 package com.swd392.funfundbe.service;
 
+import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
+import com.swd392.funfundbe.model.CustomError;
 import com.swd392.funfundbe.model.Response.AreaResponse;
+import com.swd392.funfundbe.model.Response.FieldResponse;
 import com.swd392.funfundbe.model.entity.Area;
+import com.swd392.funfundbe.model.entity.Field;
 import com.swd392.funfundbe.model.mapper.ObjectMapper;
 import com.swd392.funfundbe.repository.AreaRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +25,11 @@ public class AreaService {
                 .map(ObjectMapper::fromAreaToAreaResponse)
                 .toList();
         return areaResponses;
+    }
+
+    public AreaResponse getAreaById(int areaId) throws CustomNotFoundException {
+        Area area = areaRepository.findById(areaId)
+                .orElseThrow(() -> new CustomNotFoundException(CustomError.builder().message("Area ID not found").build()));
+        return ObjectMapper.fromAreaToAreaResponse(area);
     }
 }

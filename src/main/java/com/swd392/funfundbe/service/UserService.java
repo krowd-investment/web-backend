@@ -142,11 +142,6 @@ public class UserService {
     }
 
     public UserResponse getCurrentUserInfo() throws CustomNotFoundException, CustomForbiddenException {
-        boolean checkCurrentUser = AuthenticateService.checkCurrentUser();
-        if (!checkCurrentUser) {
-            throw new CustomForbiddenException(
-                    CustomError.builder().code("403").message("can't access this api").field("user_status").build());
-        }
         return new UserResponse(AuthenticateService.getCurrentUserFromSecurityContext());
     }
 

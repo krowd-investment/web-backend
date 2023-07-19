@@ -64,4 +64,15 @@ public class AdminControllerImpl implements AdminController {
         List<ProjectResponse> projectResponses = projectService.getAllProjectByStatus(status);
         return ResponseEntity.ok(projectResponses);
     }
+
+    @Override
+    public ResponseEntity<?> approveInvestedCapitalOfProject(int projectId) throws CustomNotFoundException, CustomBadRequestException {
+        adminService.approveInvestedCapitalOfProject(projectId);
+        return ResponseEntity.ok("Approve successfully");
+    }
+
+    @Override
+    public ResponseEntity<?> rejectInvestedCapitalOfProject(int projectId) {
+        return ResponseEntity.ok("Under development");
+    }
 }

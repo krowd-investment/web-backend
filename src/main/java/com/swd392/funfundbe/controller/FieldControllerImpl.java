@@ -1,6 +1,7 @@
 package com.swd392.funfundbe.controller;
 
 import com.swd392.funfundbe.controller.api.FieldController;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Response.FieldResponse;
 import com.swd392.funfundbe.service.FieldService;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,11 @@ public class FieldControllerImpl implements FieldController {
         return new ResponseEntity<>(
                 response, HttpStatus.OK
         );
+    }
+
+    @Override
+    public ResponseEntity<FieldResponse> getFieldById(int fieldId) throws CustomNotFoundException {
+        FieldResponse fieldResponse = fieldService.getFieldById(fieldId);
+        return ResponseEntity.ok(fieldResponse);
     }
 }

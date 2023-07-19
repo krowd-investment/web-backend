@@ -1,5 +1,8 @@
 package com.swd392.funfundbe.controller;
 
+import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
+import com.swd392.funfundbe.model.enums.WalletTypeString;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -58,5 +61,23 @@ public class ProjectControllerImpl implements ProjectController {
             throws CustomForbiddenException, CustomNotFoundException {
         List<ProjectResponse> projectResponses = projectService.filterProjectByTargetCapital(target);
         return ResponseEntity.ok(projectResponses);
+    }
+
+    @Override
+    public ResponseEntity<ProjectWalletResponse> getProjectInvestmentWallet(int projectId) throws CustomNotFoundException, CustomForbiddenException {
+        ProjectWalletResponse projectWalletResponse = projectService.getProjectWalletResponse(
+                projectId,
+                WalletTypeString.PROJECT_INVESTMENT_WALLET
+        );
+        return new ResponseEntity<>(projectWalletResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<ProjectWalletResponse> getProjectPaymentWallet(int projectId) throws CustomNotFoundException, CustomForbiddenException {
+        ProjectWalletResponse projectWalletResponse = projectService.getProjectWalletResponse(
+                projectId,
+                WalletTypeString.PROJECT_PAYMENT_WALLET
+        );
+        return new ResponseEntity<>(projectWalletResponse, HttpStatus.OK);
     }
 }

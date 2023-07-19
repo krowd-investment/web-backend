@@ -5,14 +5,17 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import com.swd392.funfundbe.controller.api.exception.custom.*;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.swd392.funfundbe.model.CustomError;
 import com.swd392.funfundbe.model.ErrorMessage;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {

@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
+import com.swd392.funfundbe.model.entity.*;
+import com.swd392.funfundbe.model.enums.WalletTypeString;
+import com.swd392.funfundbe.repository.*;
 import org.springframework.stereotype.Service;
 
 import com.swd392.funfundbe.controller.api.exception.custom.CustomUnauthorizedException;
@@ -17,17 +21,9 @@ import com.swd392.funfundbe.model.Request.FieldFilterRequest;
 import com.swd392.funfundbe.model.Request.TargetCapitalFilterRequest;
 import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
-import com.swd392.funfundbe.model.entity.Area;
-import com.swd392.funfundbe.model.entity.Field;
-import com.swd392.funfundbe.model.entity.Project;
-import com.swd392.funfundbe.model.entity.UserTbl;
 import com.swd392.funfundbe.model.enums.ProjectStatus;
 import com.swd392.funfundbe.model.enums.Role;
 import com.swd392.funfundbe.model.mapper.ObjectMapper;
-import com.swd392.funfundbe.repository.AreaRepository;
-import com.swd392.funfundbe.repository.FieldRepository;
-import com.swd392.funfundbe.repository.ProjectRepository;
-import com.swd392.funfundbe.repository.UserRepository;
 import com.swd392.funfundbe.service.AuthenticateService;
 import com.swd392.funfundbe.service.project.ProjectService;
 
@@ -39,6 +35,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final AreaRepository areaRepository;
     private final FieldRepository fieldRepository;
+    private final ProjectWalletRepository projectWalletRepository;
 
     @Override
     public List<ProjectResponse> getAllProject()
@@ -267,5 +264,33 @@ public class ProjectServiceImpl implements ProjectService {
             return projectResponse;
         }).toList();
         return projectResponses;
+    }
+
+    @Override
+    public ProjectWalletResponse getProjectWalletResponse(int projectId, WalletTypeString walletTypeString) throws CustomNotFoundException, CustomForbiddenException {
+        UserTbl user = AuthenticateService.getCurrentUserFromSecurityContext();
+        if (!user.isEnabled()) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().message("Can't access this api").build()
+            );
+        }
+        if (user.getRole().getRoleId().equals(Role.ADMIN.toString())) {
+            return ObjectMapper.fromProjectWalletToProjectWalletResponse(getProjectWallet(projectId, walletTypeString));
+        }
+        else if (user.getRole().getRoleId().equals(Role.PO.toString())) {
+            ProjectWallet projectWallet = getProjectWallet(projectId, walletTypeString);
+            if (projectWallet.getProject().getProjectCreatedBy().getUserId() != user.getUserId())
+                throw new CustomForbiddenException(CustomError.builder().message("Can't view project wallet of other owner's project").build());
+            return ObjectMapper.fromProjectWalletToProjectWalletResponse(projectWallet);
+        }
+        return  null;
+    }
+
+    private ProjectWallet getProjectWallet(int projectId, WalletTypeString walletTypeString) throws CustomNotFoundException {
+        ProjectWallet projectWallet = projectWalletRepository.findByProject_ProjectIdAndWalletType_WalletTypeId(
+                projectId,
+                walletTypeString.toString()
+        ).orElseThrow(() -> new CustomNotFoundException(CustomError.builder().message("Project wallet not found with such project ID").build()));
+        return projectWallet;
     }
 }

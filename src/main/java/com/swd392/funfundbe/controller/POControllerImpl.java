@@ -47,30 +47,6 @@ public class POControllerImpl implements POController {
     }
 
     @Override
-    public ResponseEntity<ProjectWalletResponse> getProjectInvestmentWallet(int projectId) {
-        ProjectWalletResponse response = new ProjectWalletResponse(
-                UUID.randomUUID(),
-                WalletTypeString.PROJECT_INVESTMENT_WALLET.toString(),
-                projectId,
-                new BigDecimal(2000000000),
-                new Date(),
-                true);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<ProjectWalletResponse> getProjectPaymentWallet(int projectId) {
-        ProjectWalletResponse response = new ProjectWalletResponse(
-                UUID.randomUUID(),
-                WalletTypeString.PROJECT_PAYMENT_WALLET.toString(),
-                projectId,
-                new BigDecimal(2000000000),
-                new Date(),
-                true);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @Override
     public ResponseEntity<List<ProjectResponse>> getAllProjectOfCurrentPO() throws CustomNotFoundException {
         List<ProjectResponse> projectResponses = projectService.getProjectOfCurrentUser();
         return ResponseEntity.ok(projectResponses);

@@ -69,4 +69,22 @@ public interface AdminController {
         public ResponseEntity<List<ProjectResponse>> filterProjectByStatus(
                         @RequestParam(required = false) String status)
                         throws CustomNotFoundException, CustomForbiddenException;
+
+        //approve invested project
+        @Operation(summary = "Approve invested capital for a project", description = "Approve invested capital for a project")
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "Approve invested capital for a project successfully")
+        })
+        @PutMapping("/approve-invested-capital/{project_id}")
+        @PreAuthorize("hasAuthority('ADMIN')")
+        public ResponseEntity<?> approveInvestedCapitalOfProject(@PathVariable("project_id") int projectId) throws CustomNotFoundException, CustomBadRequestException;
+
+        //approve invested project
+        @Operation(summary = "Reject invested capital for a project", description = "Reject invested capital for a project")
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "Reject invested capital for a project successfully")
+        })
+        @PutMapping("/reject-invested-capital/{project_id}")
+        @PreAuthorize("hasAuthority('ADMIN')")
+        public ResponseEntity<?> rejectInvestedCapitalOfProject(@PathVariable("project_id") int projectId);
 }

@@ -1,5 +1,7 @@
 package com.swd392.funfundbe.service;
 
+import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
+import com.swd392.funfundbe.model.CustomError;
 import com.swd392.funfundbe.model.Response.FieldResponse;
 import com.swd392.funfundbe.model.entity.Field;
 import com.swd392.funfundbe.model.mapper.ObjectMapper;
@@ -20,5 +22,11 @@ public class FieldService {
                 .map(ObjectMapper::fromFieldToFieldResponse)
                 .toList();
         return fieldResponses;
+    }
+
+    public FieldResponse getFieldById(int fieldId) throws CustomNotFoundException {
+        Field field = fieldRepository.findById(fieldId)
+                .orElseThrow(() -> new CustomNotFoundException(CustomError.builder().message("Field ID not found").build()));
+        return ObjectMapper.fromFieldToFieldResponse(field);
     }
 }

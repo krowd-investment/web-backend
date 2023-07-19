@@ -5,10 +5,7 @@ import java.util.Date;
 import com.swd392.funfundbe.model.Request.CreateProjectRequest;
 import com.swd392.funfundbe.model.Request.InvestProjectRequest;
 import com.swd392.funfundbe.model.Response.*;
-import com.swd392.funfundbe.model.entity.Area;
-import com.swd392.funfundbe.model.entity.Field;
-import com.swd392.funfundbe.model.entity.Investment;
-import com.swd392.funfundbe.model.entity.Project;
+import com.swd392.funfundbe.model.entity.*;
 
 public class ObjectMapper {
     public static ProjectResponse fromProjectToProjectResponse(Project project) {
@@ -80,5 +77,17 @@ public class ObjectMapper {
                 .status(area.isStatus())
                 .build();
         return areaResponse;
+    }
+
+    public static ProjectWalletResponse fromProjectWalletToProjectWalletResponse(ProjectWallet projectWallet) {
+        if (projectWallet == null) return null;
+        return ProjectWalletResponse.builder()
+                .projectWalletId(projectWallet.getProjectWalletId())
+                .walletTypeId(projectWallet.getWalletType().getWalletTypeId())
+                .projectId(projectWallet.getProject().getProjectId())
+                .balance(projectWallet.getBalance())
+                .updatedAt(projectWallet.getUpdatedAt())
+                .status(projectWallet.isStatus())
+                .build();
     }
 }
