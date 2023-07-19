@@ -11,6 +11,7 @@ import com.swd392.funfundbe.model.Request.AreaFilterRequest;
 import com.swd392.funfundbe.model.Request.FieldFilterRequest;
 import com.swd392.funfundbe.model.Request.ProjectStatusRequest;
 import com.swd392.funfundbe.model.Request.TargetCapitalFilterRequest;
+import com.swd392.funfundbe.model.Request.UpdateProjectRequest;
 import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
 import com.swd392.funfundbe.service.project.ProjectService;
@@ -58,5 +59,12 @@ public class ProjectControllerImpl implements ProjectController {
             throws CustomForbiddenException, CustomNotFoundException {
         List<ProjectResponse> projectResponses = projectService.filterProjectByTargetCapital(target);
         return ResponseEntity.ok(projectResponses);
+    }
+
+    @Override
+    public ResponseEntity<String> updateProject(int id, UpdateProjectRequest request)
+            throws CustomNotFoundException, CustomForbiddenException {
+        String result = projectService.updateProject(id, request);
+        return ResponseEntity.ok(result);
     }
 }

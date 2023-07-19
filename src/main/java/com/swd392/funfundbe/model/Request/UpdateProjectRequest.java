@@ -1,14 +1,16 @@
 package com.swd392.funfundbe.model.Request;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 @Getter
 @Setter
-public class CreateProjectRequest {
+@Data
+public class UpdateProjectRequest {
     private int fieldId;
     private int areaId;
     private String projectName;
@@ -23,4 +25,8 @@ public class CreateProjectRequest {
     private String projectDescription;
     private String businessLicense;
     private int numberOfStage;
+    private String Status;
+    private BigDecimal investedCapital;
+    private BigDecimal paidAmount;
+    private BigDecimal remainingAmount;
 }
