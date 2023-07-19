@@ -1,23 +1,33 @@
 package com.swd392.funfundbe.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.CustomError;
 import com.swd392.funfundbe.model.Request.InvestProjectRequest;
 import com.swd392.funfundbe.model.Response.InvestedProjectResponse;
 import com.swd392.funfundbe.model.entity.Investment;
+import com.swd392.funfundbe.model.entity.InvestmentTransaction;
+import com.swd392.funfundbe.model.entity.PersonalWallet;
 import com.swd392.funfundbe.model.entity.Project;
+import com.swd392.funfundbe.model.entity.ProjectWallet;
 import com.swd392.funfundbe.model.entity.UserTbl;
+import com.swd392.funfundbe.model.enums.InvestmentTransactionType;
 import com.swd392.funfundbe.model.enums.ProjectStatus;
 import com.swd392.funfundbe.model.mapper.ObjectMapper;
 import com.swd392.funfundbe.repository.InvestmentRepository;
+import com.swd392.funfundbe.repository.InvestmentTransactionRepo;
+import com.swd392.funfundbe.repository.PersonalWalletRepository;
 import com.swd392.funfundbe.repository.ProjectRepository;
+import com.swd392.funfundbe.repository.ProjectWalletRepository;
 import com.swd392.funfundbe.repository.UserRepository;
 import com.swd392.funfundbe.service.AuthenticateService;
 import com.swd392.funfundbe.service.investment.InvestmentService;
@@ -30,6 +40,9 @@ public class InvestmentServiceImpl implements InvestmentService {
     private final InvestmentRepository investmentRepository;
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final PersonalWalletRepository personalWalletRepository;
+    private final ProjectWalletRepository projectWalletRepository;
+    private final InvestmentTransactionRepo investmentTransactionRepository;
 
     @Override
     public List<InvestedProjectResponse> getAllInvestmentOfCurrentUser() throws CustomNotFoundException {
@@ -49,7 +62,7 @@ public class InvestmentServiceImpl implements InvestmentService {
 
     @Override
     public InvestedProjectResponse investProject(InvestProjectRequest request)
-            throws CustomNotFoundException, CustomForbiddenException {
+            throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException {
         boolean check = AuthenticateService.checkCurrentUser();
         if (!check) {
             throw new CustomForbiddenException(
@@ -66,11 +79,55 @@ public class InvestmentServiceImpl implements InvestmentService {
         if (investment.getStatus().trim().equals("")) {
             investment.setStatus("SUCCESS");
         }
+        PersonalWallet personalWallet = personalWalletRepository
+                .findByPersonalwalletOf_UserIdAndWalletType_WalletTypeId(
+                        AuthenticateService.getCurrentUserFromSecurityContext().getUserId(), "GENERAL_WALLET")
+                .orElse(null);
+        if (personalWallet.getBalance().doubleValue() < request.getTotalMoney().doubleValue()) {
+            throw new CustomBadRequestException(CustomError.builder().code("400")
+                    .message("Balance of wallet can't do this transaction because it is not enough for it").build());
+        }
+        if (project.getInvestmentTargetCapital().doubleValue() - project.getInvestedCapital().doubleValue() < request
+                .getTotalMoney().doubleValue()) {
+            throw new CustomBadRequestException(CustomError.builder().code("400")
+                    .message("Balance of wallet can't do this transaction because it is over target of project")
+                    .build());
+        }
+        if (!project.getStatus().equals(ProjectStatus.APPROVED.toString())) {
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Project is not in time to invest").build());
+        }
+        if (project.getStartDate().after(new Date()) || project.getEndDate().before(new Date())) {
+            throw new CustomBadRequestException(
+                    CustomError.builder().code("400").message("Project is not in time to invest").build());
+        }
         investment.setProject(project);
         investment.setInvestmentUser(user);
         investment.setInvestmentId(uuid);
         investmentRepository.save(investment);
+        if (personalWallet != null) {
+            personalWallet.setBalance(
+                    new BigDecimal(personalWallet.getBalance().doubleValue() - request.getTotalMoney().doubleValue()));
+            personalWalletRepository.save(personalWallet);
+        }
+        ProjectWallet projectWallet = projectWalletRepository
+                .findByProject_ProjectIdAndWalletType_WalletTypeId(request.getProjectId(), "PROJECT_INVESTMENT_WALLET")
+                .orElse(null);
+        if (projectWallet != null) {
+            projectWallet.setBalance(
+                    new BigDecimal(projectWallet.getBalance().doubleValue() + request.getTotalMoney().doubleValue()));
+            projectWalletRepository.save(projectWallet);
+        }
+        InvestmentTransaction investmentTransaction = InvestmentTransaction.builder().amount(request.getTotalMoney())
+                .createdAt(new Date())
+                .personalWallet(personalWallet).projectWallet(projectWallet)
+                .type(InvestmentTransactionType.INVESTOR_TO_PROJECT.toString())
+                .investmentTransactioncreatedBy(user)
+                .investment(investment)
+                .build();
+        investmentTransactionRepository.save(investmentTransaction);
         return ObjectMapper.fromInvestmentToInvestedResponse(investment);
+
     }
 
     @Override
