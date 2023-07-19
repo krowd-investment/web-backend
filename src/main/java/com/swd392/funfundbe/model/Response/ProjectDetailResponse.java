@@ -26,4 +26,11 @@ public class ProjectDetailResponse {
     private Date startDate;
     private Date endDate;
     private String status;
+    private int numberOfStage;
+    private String projectDescription;
+    private BigDecimal investmentTargetCapital;
+    private BigDecimal paidAmount;
+    private BigDecimal remainingAmount;
+    private String businessLicense;
+
 }

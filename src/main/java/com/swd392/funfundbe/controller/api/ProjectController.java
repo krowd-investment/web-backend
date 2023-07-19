@@ -20,10 +20,12 @@ import com.swd392.funfundbe.model.Request.AreaFilterRequest;
 import com.swd392.funfundbe.model.Request.FieldFilterRequest;
 import com.swd392.funfundbe.model.Request.ProjectStatusRequest;
 import com.swd392.funfundbe.model.Request.TargetCapitalFilterRequest;
+import com.swd392.funfundbe.model.Request.UpdateProjectRequest;
 import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RequestMapping("/api/projects")
 @Tag(name = "project")
@@ -54,5 +56,10 @@ public interface ProjectController {
         public ResponseEntity<List<ProjectResponse>> filterProjectByTarget(
                         @RequestParam BigDecimal target)
                         throws CustomForbiddenException, CustomNotFoundException;
+
+        @Operation(summary = "update project")
+        @PutMapping(value = "project/{id}")
+        public ResponseEntity<String> updateProject(@PathVariable int id, @RequestBody UpdateProjectRequest request)
+                        throws CustomNotFoundException, CustomForbiddenException;
 
 }
