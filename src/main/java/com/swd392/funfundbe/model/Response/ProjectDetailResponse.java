@@ -15,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectDetailResponse {
+    private int projectId;
     private String projectName;
     private String image;
     private BigDecimal targetCapital;
@@ -28,6 +29,10 @@ public class ProjectDetailResponse {
     private String status;
     private int numberOfStage;
     private String projectDescription;
+    private int areaId;
+    private String areaName;
+    private int fieldId;
+    private String fieldName;
     private BigDecimal investmentTargetCapital;
     private BigDecimal paidAmount;
     private BigDecimal remainingAmount;

@@ -25,8 +25,4 @@ public class UpdateProjectRequest {
     private String projectDescription;
     private String businessLicense;
     private int numberOfStage;
-    private String Status;
-    private BigDecimal investedCapital;
-    private BigDecimal paidAmount;
-    private BigDecimal remainingAmount;
 }

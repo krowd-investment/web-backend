@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
 import com.swd392.funfundbe.model.entity.*;
 import com.swd392.funfundbe.model.enums.WalletTypeString;
@@ -163,7 +164,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public String createProject(CreateProjectRequest projectRequest)
+    public ProjectResponse createProject(CreateProjectRequest projectRequest)
             throws CustomNotFoundException, CustomForbiddenException {
         UserTbl user = AuthenticateService.getCurrentUserFromSecurityContext();
         if (!user.getRole().getRoleId().equals(Role.PO.toString()) || !AuthenticateService.checkCurrentUser()) {
@@ -202,10 +203,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .projectCreatedBy(user)
                 .build();
         Project save = projectRepository.save(project);
-        if (save == null) {
-            return "Create new project failed";
-        }
-        return "Create new project successfully";
+        return ObjectMapper.fromProjectToProjectResponse(save);
     }
 
     @Override
@@ -296,8 +294,7 @@ public class ProjectServiceImpl implements ProjectService {
                         CustomError.builder().message("Project wallet not found with such project ID").build()));
         return projectWallet;
     }
-    public String updateProject(int id, UpdateProjectRequest request)
-            throws CustomNotFoundException, CustomForbiddenException {
+    public ProjectResponse updateProject(int id, UpdateProjectRequest request) throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException {
         if (!AuthenticateService.getCurrentUserFromSecurityContext().getRole().getRoleId()
                 .equals(Role.PO.toString())) {
             throw new CustomForbiddenException(
@@ -308,6 +305,9 @@ public class ProjectServiceImpl implements ProjectService {
             throw new CustomNotFoundException(
                     CustomError.builder().code("404").message("not found project matched id").build());
         }
+
+        checkProjectStatusForUpdating(project);
+
         Area area = areaRepository.findByAreaId(request.getAreaId());
         if (area != null) {
             project.setArea(area);
@@ -321,23 +321,25 @@ public class ProjectServiceImpl implements ProjectService {
         project.setBrand(request.getBrand());
         project.setDuration(request.getDuration());
         project.setImage(request.getImage());
-        project.setInvestedCapital(request.getInvestedCapital());
         project.setInvestmentTargetCapital(request.getInvestmentTargetCapital());
         project.setMultiplier(project.getMultiplier());
         project.setNumberOfStage(request.getNumberOfStage());
-        project.setPaidAmount(request.getPaidAmount());
         project.setProjectDescription(request.getProjectDescription());
         project.setStartDate(request.getStartDate());
         project.setEndDate(request.getEndDate());
         project.setProjectName(request.getProjectName());
-        project.setRemainingAmount(request.getRemainingAmount());
         project.setProjectUpdatedBy(user);
-        project.setStatus(request.getStatus());
         project.setSharedRevenue(request.getSharedRevenue());
         projectRepository.save(project);
-        if (project != null) {
-            return "Update successfully";
-        }
-        return "Update failed";
+        return ObjectMapper.fromProjectToProjectResponse(project);
+    }
+
+    private void checkProjectStatusForUpdating(Project project) throws CustomBadRequestException {
+        if (!project.getStatus().equals(ProjectStatus.REJECTED.toString()) && !project.getStatus().equals(ProjectStatus.PENDING.toString()))
+            throw new CustomBadRequestException(
+                    CustomError.builder()
+                            .code("400").message("Project must be PENDING or REJECTED for updating")
+                            .build()
+            );
     }
 }

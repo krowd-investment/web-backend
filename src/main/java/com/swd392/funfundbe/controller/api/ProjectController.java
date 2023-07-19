@@ -73,9 +73,5 @@ public interface ProjectController {
                 @PathVariable("project_id") int projectId) throws CustomNotFoundException, CustomForbiddenException;
 
 
-        @Operation(summary = "update project")
-        @PutMapping(value = "project/{id}")
-        public ResponseEntity<String> updateProject(@PathVariable int id, @RequestBody UpdateProjectRequest request)
-                        throws CustomNotFoundException, CustomForbiddenException;
 
 }

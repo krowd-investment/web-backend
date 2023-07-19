@@ -1,9 +1,11 @@
 package com.swd392.funfundbe.controller;
 
 import com.swd392.funfundbe.controller.api.POController;
+import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.CreateProjectRequest;
+import com.swd392.funfundbe.model.Request.UpdateProjectRequest;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
 import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
 import com.swd392.funfundbe.model.enums.WalletTypeString;
@@ -27,13 +29,14 @@ public class POControllerImpl implements POController {
     @Override
     public ResponseEntity<?> createProject(CreateProjectRequest request)
             throws CustomNotFoundException, CustomForbiddenException {
-        String result = projectService.createProject(request);
-        return ResponseEntity.ok(result);
+        ProjectResponse result = projectService.createProject(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @Override
-    public ResponseEntity<?> updateProject(int projectId, CreateProjectRequest request) {
-        return new ResponseEntity<>("Update project successfully", HttpStatus.OK);
+    public ResponseEntity<?> updateProject(int id, UpdateProjectRequest request) throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException {
+        ProjectResponse result = projectService.updateProject(id, request);
+        return ResponseEntity.ok(result);
     }
 
     @Override

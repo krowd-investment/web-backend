@@ -79,10 +79,4 @@ public class ProjectControllerImpl implements ProjectController {
         return new ResponseEntity<>(projectWalletResponse, HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<String> updateProject(int id, UpdateProjectRequest request)
-            throws CustomNotFoundException, CustomForbiddenException {
-        String result = projectService.updateProject(id, request);
-        return ResponseEntity.ok(result);
-    }
 }

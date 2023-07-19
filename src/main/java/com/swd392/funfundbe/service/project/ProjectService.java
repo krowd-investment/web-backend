@@ -3,6 +3,7 @@ package com.swd392.funfundbe.service.project;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.controller.api.exception.custom.CustomUnauthorizedException;
@@ -29,7 +30,7 @@ public interface ProjectService {
         public List<ProjectResponse> filterProjectByTargetCapital(BigDecimal target)
                         throws CustomForbiddenException, CustomNotFoundException;
 
-        public String createProject(CreateProjectRequest projectRequest)
+        public ProjectResponse createProject(CreateProjectRequest projectRequest)
                         throws CustomNotFoundException, CustomForbiddenException;
 
         public List<ProjectResponse> getAllProjectByStatus(String status)
@@ -39,6 +40,5 @@ public interface ProjectService {
 
         public ProjectWalletResponse getProjectWalletResponse(int projectId, WalletTypeString walletTypeString)
                 throws CustomNotFoundException, CustomForbiddenException;
-        public String updateProject(int id, UpdateProjectRequest request)
-                        throws CustomNotFoundException, CustomForbiddenException;
+        public ProjectResponse updateProject(int id, UpdateProjectRequest request) throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException;
 }

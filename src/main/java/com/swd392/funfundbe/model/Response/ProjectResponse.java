@@ -17,7 +17,9 @@ public class ProjectResponse {
     private int projectId;
     private String projectName;
     private String description;
+    private int areaId;
     private String areaName;
+    private int fieldId;
     private String fieldName;
     private String image;
     private Date createAt;

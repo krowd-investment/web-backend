@@ -17,11 +17,17 @@ public class ObjectMapper {
                 .endDate(project.getEndDate())
                 .startDate(project.getStartDate())
                 .status(project.getStatus())
+                .fieldId(project.getField().getFieldId())
+                .fieldName(project.getField().getName())
+                .areaId(project.getArea().getAreaId())
+                .areaName(project.getArea().getCity() + "-" + project.getArea().getDistrict())
                 .build();
     }
 
     public static ProjectDetailResponse fromProjectToProjectDetailResponse(Project project) {
-        return ProjectDetailResponse.builder().duration(project.getDuration())
+        return ProjectDetailResponse.builder()
+                .projectId(project.getProjectId())
+                .duration(project.getDuration())
                 .mutiplier(project.getMultiplier())
                 .image(project.getImage())
                 .projectName(project.getProjectName())
@@ -38,6 +44,10 @@ public class ObjectMapper {
                 .paidAmount(project.getPaidAmount())
                 .remainingAmount(project.getRemainingAmount())
                 .businessLicense(project.getBusinessLicense())
+                .fieldId(project.getField().getFieldId())
+                .fieldName(project.getField().getName())
+                .areaId(project.getArea().getAreaId())
+                .areaName(project.getArea().getCity() + "-" + project.getArea().getDistrict())
                 .build();
     }
 
