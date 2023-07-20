@@ -12,8 +12,11 @@ import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundExcept
 import com.swd392.funfundbe.model.CustomError;
 import com.swd392.funfundbe.model.Request.PersonalWalletTransactionRequest;
 import com.swd392.funfundbe.model.Response.PersonalWalletResponse;
+import com.swd392.funfundbe.model.Response.transaction.TransactionHistory;
 import com.swd392.funfundbe.model.entity.*;
+import com.swd392.funfundbe.model.enums.TransactionHistoryType;
 import com.swd392.funfundbe.model.enums.WalletTypeString;
+import com.swd392.funfundbe.model.mapper.ObjectMapper;
 import com.swd392.funfundbe.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +38,8 @@ public class UserService {
     private final WalletTypeRepository walletTypeRepository;
     private final PersonalWalletRepository personalWalletRepository;
     private final PWalletTransactionRepository pWalletTransactionRepository;
+    private final DepositTransactionRepository depositTransactionRepository;
+    private final InvestmentTransactionRepo investmentTransactionRepo;
 
     public UserTbl getUserByEmail(String email) {
         Optional<UserTbl> isExistUser = userRepository.findByEmail(email);
@@ -241,5 +246,45 @@ public class UserService {
                 .personalWalletDescription(request.getDescription())
                 .build();
         pWalletTransactionRepository.save(personalWalletTransaction);
+    }
+
+    public TransactionHistory getTransactionHistory(TransactionHistoryType type) throws CustomNotFoundException, CustomForbiddenException {
+        UserTbl userTbl = AuthenticateService.getCurrentUserFromSecurityContext();
+        if (!userTbl.isEnabled()) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("can't access this api").field("user_status").build());
+        }
+
+        PersonalWallet generalWallet = getPersonalWallet(userTbl, WalletTypeString.GENERAL_WALLET);
+        PersonalWallet collectionWallet = getPersonalWallet(userTbl, WalletTypeString.COLLECTION_WALLET);
+
+        if (type.equals(TransactionHistoryType.DEPOSIT)) {
+            List<DepositTransaction> depositTransactions = getDepositTransaction(userTbl);
+            return ObjectMapper.toTransactionHistory(generalWallet, collectionWallet, depositTransactions, null, null, type);
+        }
+        else if (type.equals(TransactionHistoryType.GENERAL_TO_COLLECTION) || type.equals(TransactionHistoryType.COLLECTION_TO_GENERAL)) {
+            List<PersonalWalletTransaction> personalWalletTransactions = getPersonalWalletTransaction(userTbl);
+            return ObjectMapper.toTransactionHistory(generalWallet, collectionWallet, null, personalWalletTransactions, null, type);
+        }
+        else if (type.equals(TransactionHistoryType.PERSONAL_TO_PROJECT) || type.equals(TransactionHistoryType.PROJECT_TO_PERSONAL)) {
+            List<InvestmentTransaction> investmentTransactions = getInvestmentTransaction(userTbl);
+            return ObjectMapper.toTransactionHistory(generalWallet, collectionWallet, null, null, investmentTransactions, type);
+        }
+        return null;
+    }
+
+    public List<DepositTransaction> getDepositTransaction(UserTbl userTbl) throws CustomNotFoundException {
+        List<DepositTransaction> depositTransactions = depositTransactionRepository.findByToWallet_PersonalwalletOf_UserIdAndVerifiedTrue(userTbl.getUserId());
+        return depositTransactions;
+    }
+
+    public List<PersonalWalletTransaction> getPersonalWalletTransaction(UserTbl userTbl) {
+        List<PersonalWalletTransaction> personalWalletTransactions = pWalletTransactionRepository.findByFromWallet_PersonalwalletOf_UserId(userTbl.getUserId());
+        return personalWalletTransactions;
+    }
+
+    public List<InvestmentTransaction> getInvestmentTransaction(UserTbl userTbl) {
+        List<InvestmentTransaction> investmentTransactions = investmentTransactionRepo.findByPersonalWallet_PersonalwalletOf_UserId(userTbl.getUserId());
+        return investmentTransactions;
     }
 }

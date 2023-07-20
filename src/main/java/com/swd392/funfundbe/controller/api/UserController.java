@@ -1,5 +1,6 @@
 package com.swd392.funfundbe.controller.api;
 
+import com.swd392.funfundbe.model.enums.TransactionHistoryType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -86,11 +87,7 @@ public interface UserController {
         @PutMapping("/transfer-money")
         public ResponseEntity<?> transferMoney(@RequestBody @Valid PersonalWalletTransactionRequest request) throws CustomNotFoundException, CustomBadRequestException, CustomForbiddenException;
 
-        @Operation(summary = "logout")
-        @PostMapping("/logout")
-        public ResponseEntity<?> logout();
-
-        @Operation(summary = "send notification")
-        @PostMapping("/sendNotification")
-        public ResponseEntity<?> sendNotification(@RequestBody NotificationRequest notificationRequest);
+        @Operation(summary = "Get transaction history", description = "Get all transaction history")
+        @PutMapping("/transaction-history")
+        public ResponseEntity<?> getTransactionHistory(@RequestParam("type") TransactionHistoryType type) throws CustomNotFoundException, CustomForbiddenException;
 }

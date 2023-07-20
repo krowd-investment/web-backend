@@ -9,6 +9,8 @@ import com.swd392.funfundbe.model.Request.PersonalWalletTransactionRequest;
 import com.swd392.funfundbe.model.Request.RegisterUserRequest;
 import com.swd392.funfundbe.model.Response.PersonalWalletResponse;
 import com.swd392.funfundbe.model.Response.UserResponse;
+import com.swd392.funfundbe.model.Response.transaction.TransactionHistory;
+import com.swd392.funfundbe.model.enums.TransactionHistoryType;
 import com.swd392.funfundbe.model.enums.WalletTypeString;
 import com.swd392.funfundbe.service.PaymentService;
 import com.swd392.funfundbe.service.UserService;
@@ -81,12 +83,10 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<?> logout() {
-        return ResponseEntity.ok("log out successfully");
+    public ResponseEntity<?> getTransactionHistory(TransactionHistoryType type) throws CustomNotFoundException, CustomForbiddenException {
+        TransactionHistory transactionHistory = userService.getTransactionHistory(type);
+        return ResponseEntity.ok(transactionHistory);
     }
 
-    @Override
-    public ResponseEntity<?> sendNotification(NotificationRequest notificationRequest) {
-        return ResponseEntity.ok("Send Notification Successfully");
-    }
+
 }
