@@ -37,7 +37,7 @@ public interface POController {
         // Update project (only before receiving money)
         @Operation(summary = "PO update project", description = "PO update project for investment")
         @PutMapping("/project/{project_id}")
-        public ResponseEntity<?> updateProject(@PathVariable("project_id") int id, @RequestBody UpdateProjectRequest request) throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException;
+        public ResponseEntity<?> updateProject(@PathVariable("project_id") int id, @RequestBody @Valid UpdateProjectRequest request) throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException;
 
         // Delete project (only before receiving money)
         @Operation(summary = "PO delete project", description = "PO delete project, oly available before receiving money")
@@ -47,7 +47,7 @@ public interface POController {
         // Start projects
         @Operation(summary = "PO start project", description = "PO start project after receiving enough capital")
         @PutMapping("/project/start/{project_id}")
-        public ResponseEntity<?> startProject(@PathVariable("project_id") int projectId);
+        public ResponseEntity<?> startProject(@PathVariable("project_id") int projectId) throws CustomNotFoundException, CustomBadRequestException, CustomForbiddenException;
 
         // Transact money from GeneralWallet to ProjectPaymentWallet
 

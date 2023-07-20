@@ -2,6 +2,7 @@ package com.swd392.funfundbe.model.Response;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,5 +38,6 @@ public class ProjectDetailResponse {
     private BigDecimal paidAmount;
     private BigDecimal remainingAmount;
     private String businessLicense;
+    private List<StageResponse> stages;
 
 }

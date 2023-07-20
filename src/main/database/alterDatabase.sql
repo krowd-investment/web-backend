@@ -69,3 +69,9 @@ create table DepositTransaction(
     Foreign Key(created_by) references [Usertbl]([user_id])
 )
 
+--updated by Tien on 20/7/2023
+alter table Project
+alter column shared_revenue decimal(5,3)
+alter table Project
+alter column multiplier decimal(5,3)
+

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
+import com.swd392.funfundbe.model.Response.StageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -73,5 +74,9 @@ public interface ProjectController {
                 @PathVariable("project_id") int projectId) throws CustomNotFoundException, CustomForbiddenException;
 
 
+        @Operation(summary = "Get all stages of project", description = "Get all stages of project")
+        @GetMapping("/{project_id}/stages")
+        public ResponseEntity<List<StageResponse>> getAllStagesOfProject(
+                @PathVariable("project_id") int projectId) throws CustomNotFoundException, CustomForbiddenException;
 
 }

@@ -7,7 +7,9 @@ import java.util.List;
 
 import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
+import com.swd392.funfundbe.model.Response.StageResponse;
 import com.swd392.funfundbe.model.entity.*;
+import com.swd392.funfundbe.model.enums.StageStatus;
 import com.swd392.funfundbe.model.enums.WalletTypeString;
 import com.swd392.funfundbe.repository.*;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final AreaRepository areaRepository;
     private final FieldRepository fieldRepository;
     private final ProjectWalletRepository projectWalletRepository;
+    private final StageRepository stageRepository;
 
     @Override
     public List<ProjectResponse> getAllProject()
@@ -341,5 +344,72 @@ public class ProjectServiceImpl implements ProjectService {
                             .code("400").message("Project must be PENDING or REJECTED for updating")
                             .build()
             );
+    }
+
+    @Override
+    public ProjectDetailResponse startProject(int projectId) throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException {
+        UserTbl user = AuthenticateService.getCurrentUserFromSecurityContext();
+        if (!user.isEnabled()) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("can not access this feature").build());
+        }
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new CustomNotFoundException(
+                        CustomError.builder().message("Project ID not found").build()
+                ));
+        if (project.getProjectCreatedBy().getUserId() != user.getUserId())
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("Can not start project of other owner").build());
+        checkProjectStatusForStarting(project);
+
+        project.setRemainingAmount(project.getInvestedCapital().multiply(project.getMultiplier()));
+        project.setStatus(ProjectStatus.STARTED.toString());
+
+        Date startDate = new Date();
+        for (int i = 1; i <= project.getNumberOfStage(); i++) {
+            if (i == 1) startDate = new Date();
+            Stage stage = Stage.builder()
+                    .name("Stage " + i)
+                    .project(project)
+                    .startDate(startDate)
+                    .endDate(calculateDateByAddingMonths(startDate, project.getDuration()))
+                    .isOverDue(false)
+                    .stageStatus(i == 1 ? StageStatus.ACTIVE.toString() : StageStatus.INACTIVE.toString())
+                    .status(true)
+                    .build();
+            stageRepository.save(stage);
+            startDate = stage.getEndDate();
+        }
+
+        return ObjectMapper.fromProjectToProjectDetailResponse(project);
+    }
+
+    private void checkProjectStatusForStarting(Project project) throws CustomBadRequestException {
+        if (!project.getStatus().equals(ProjectStatus.READY.toString()))
+            throw new CustomBadRequestException(
+                    CustomError.builder()
+                            .code("400").message("Project must be READY for starting")
+                            .build()
+            );
+    }
+
+    private Date calculateDateByAddingMonths(Date date, int durationInMonth) {
+        int newMonth = (date.getMonth() + durationInMonth) % 12;
+        int newYear  = date.getYear() + (date.getMonth() + durationInMonth) / 12;
+        return new Date(newYear, newMonth, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
+    }
+
+    @Override
+    public List<StageResponse> getAllStagesOfProject(int projectId) throws CustomNotFoundException, CustomForbiddenException {
+        if (!AuthenticateService.checkCurrentUser()) {
+            throw new CustomForbiddenException(
+                    CustomError.builder().code("403").message("can not access this feature").build());
+        }
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new CustomNotFoundException(
+                        CustomError.builder().message("Project ID not found").build()
+                ));
+        return project.getStageList().stream().map(ObjectMapper::fromStageToStageResponse).toList();
     }
 }

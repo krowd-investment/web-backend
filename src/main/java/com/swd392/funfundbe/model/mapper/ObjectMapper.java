@@ -58,6 +58,7 @@ public class ObjectMapper {
                 .fieldName(project.getField().getName())
                 .areaId(project.getArea().getAreaId())
                 .areaName(project.getArea().getCity() + "-" + project.getArea().getDistrict())
+                .stages(project.getStageList().stream().map(ObjectMapper::fromStageToStageResponse).toList())
                 .build();
     }
 
@@ -117,5 +118,19 @@ public class ObjectMapper {
                 .updatedAt(projectWallet.getUpdatedAt())
                 .status(projectWallet.isStatus())
                 .build();
+    }
+
+    public static StageResponse fromStageToStageResponse(Stage stage) {
+        return stage == null ? null :
+                StageResponse.builder()
+                        .stageId(stage.getStageId())
+                        .name(stage.getName())
+                        .description(stage.getDescription())
+                        .startDate(stage.getStartDate())
+                        .endDate(stage.getEndDate())
+                        .isOverDue(stage.isOverDue())
+                        .projectId(stage.getProject().getProjectId())
+                        .stageStatus(stage.getStageStatus())
+                        .build();
     }
 }

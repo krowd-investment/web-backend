@@ -75,6 +75,7 @@ public class AdminService {
         checkProjectStatus(project);
 
         project.setStatus(ProjectStatus.APPROVED.toString());
+        project.setProjectApprovedBy(AuthenticateService.getCurrentUserFromSecurityContext());
 
         createProjectWallet(project, WalletTypeString.PROJECT_INVESTMENT_WALLET);
         createProjectWallet(project, WalletTypeString.PROJECT_PAYMENT_WALLET);

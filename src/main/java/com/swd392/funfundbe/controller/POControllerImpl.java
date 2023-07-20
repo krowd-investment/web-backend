@@ -6,6 +6,7 @@ import com.swd392.funfundbe.controller.api.exception.custom.CustomForbiddenExcep
 import com.swd392.funfundbe.controller.api.exception.custom.CustomNotFoundException;
 import com.swd392.funfundbe.model.Request.CreateProjectRequest;
 import com.swd392.funfundbe.model.Request.UpdateProjectRequest;
+import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
 import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
 import com.swd392.funfundbe.model.enums.WalletTypeString;
@@ -45,8 +46,9 @@ public class POControllerImpl implements POController {
     }
 
     @Override
-    public ResponseEntity<?> startProject(int projectId) {
-        return new ResponseEntity<>("Start project successfully", HttpStatus.OK);
+    public ResponseEntity<?> startProject(int projectId) throws CustomNotFoundException, CustomBadRequestException, CustomForbiddenException {
+        ProjectDetailResponse response = projectService.startProject(projectId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override

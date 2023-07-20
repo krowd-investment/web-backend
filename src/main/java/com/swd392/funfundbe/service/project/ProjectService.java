@@ -12,6 +12,7 @@ import com.swd392.funfundbe.model.Request.UpdateProjectRequest;
 import com.swd392.funfundbe.model.Response.ProjectDetailResponse;
 import com.swd392.funfundbe.model.Response.ProjectResponse;
 import com.swd392.funfundbe.model.Response.ProjectWalletResponse;
+import com.swd392.funfundbe.model.Response.StageResponse;
 import com.swd392.funfundbe.model.enums.WalletTypeString;
 
 public interface ProjectService {
@@ -41,4 +42,8 @@ public interface ProjectService {
         public ProjectWalletResponse getProjectWalletResponse(int projectId, WalletTypeString walletTypeString)
                 throws CustomNotFoundException, CustomForbiddenException;
         public ProjectResponse updateProject(int id, UpdateProjectRequest request) throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException;
+
+        ProjectDetailResponse startProject(int projectId) throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException;
+
+        List<StageResponse> getAllStagesOfProject(int projectId) throws CustomNotFoundException, CustomForbiddenException;
 }
