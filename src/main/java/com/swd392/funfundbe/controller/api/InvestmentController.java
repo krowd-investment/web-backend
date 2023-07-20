@@ -3,6 +3,7 @@ package com.swd392.funfundbe.controller.api;
 import java.util.List;
 import java.util.UUID;
 
+import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,7 @@ public interface InvestmentController {
     @Operation(summary = "invest a project with current user")
     @PostMapping("/invest")
     public ResponseEntity<InvestedProjectResponse> investProject(@RequestBody InvestProjectRequest request)
-            throws CustomNotFoundException, CustomForbiddenException;
+            throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException;
 
     @Operation(summary = "cancel a project")
     @PutMapping("{id}/cancel")
