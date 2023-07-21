@@ -38,10 +38,4 @@ public class PersonalWallet {
     private BigDecimal balance;
     @Column(name = "created_at")
     private Date createdAt;
-    @OneToMany(mappedBy = "fromWallet", cascade = CascadeType.ALL)
-    private List<PersonalWalletTransaction> fromWalletTransactionList;
-    @OneToMany(mappedBy = "toWallet", cascade = CascadeType.ALL)
-    private List<PersonalWalletTransaction> toWalletTransactionList;
-    @OneToMany(mappedBy = "personalWallet", cascade = CascadeType.ALL)
-    private List<InvestmentTransaction> investmentTransactionCreatedByList;
 }
