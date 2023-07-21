@@ -3,6 +3,7 @@ package com.swd392.funfundbe.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,8 +23,7 @@ public class InvestmentControllerImpl implements InvestmentController {
     private final InvestmentService investmentService;
 
     @Override
-    public ResponseEntity<List<InvestedProjectResponse>> getAllInvestmentOfCurrentUser()
-            throws CustomNotFoundException {
+    public ResponseEntity<List<InvestedProjectResponse>> getAllInvestmentOfCurrentUser() throws CustomNotFoundException, CustomForbiddenException {
         List<InvestedProjectResponse> responses = investmentService.getAllInvestmentOfCurrentUser();
         return ResponseEntity.ok(responses);
     }
@@ -36,10 +36,10 @@ public class InvestmentControllerImpl implements InvestmentController {
     }
 
     @Override
-    public ResponseEntity<InvestedProjectResponse> cancelProject(UUID id)
+    public ResponseEntity<?> cancelProject(UUID id)
             throws CustomForbiddenException, CustomNotFoundException {
-        InvestedProjectResponse investedProjectResponse = investmentService.cancelInvested(id);
-        return ResponseEntity.ok(investedProjectResponse);
+//        InvestedProjectResponse investedProjectResponse = investmentService.cancelInvested(id);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Can not cancel project at this moment");
     }
 
 }

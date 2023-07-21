@@ -75,3 +75,6 @@ alter column shared_revenue decimal(5,3)
 alter table Project
 alter column multiplier decimal(5,3)
 
+--updated by Tien on 21/7/2023
+select * from Investment
+alter table Investment add share_amount decimal(5,3)

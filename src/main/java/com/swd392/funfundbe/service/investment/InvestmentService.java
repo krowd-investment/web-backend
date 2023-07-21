@@ -10,7 +10,7 @@ import com.swd392.funfundbe.model.Request.InvestProjectRequest;
 import com.swd392.funfundbe.model.Response.InvestedProjectResponse;
 
 public interface InvestmentService {
-    List<InvestedProjectResponse> getAllInvestmentOfCurrentUser() throws CustomNotFoundException;
+    List<InvestedProjectResponse> getAllInvestmentOfCurrentUser() throws CustomNotFoundException, CustomForbiddenException;
 
     InvestedProjectResponse investProject(InvestProjectRequest request)
             throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException;

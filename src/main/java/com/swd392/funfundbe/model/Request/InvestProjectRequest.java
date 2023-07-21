@@ -5,6 +5,8 @@ import java.util.Date;
 
 import com.google.auto.value.AutoValue.Builder;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +15,7 @@ import lombok.Setter;
 @Builder
 public class InvestProjectRequest {
     private int projectId;
+    @NotNull
+    @Positive
     private BigDecimal totalMoney;
-    private Date createAt;
-    private String status;
 }

@@ -48,6 +48,9 @@ public class Investment {
     private String contract;
     @Column(name = "status", length = 50, nullable = false)
     private String status;
+    @Column(name = "share_amount")
+    @Builder.Default
+    private BigDecimal shareAmount = BigDecimal.ZERO;
     @OneToOne(mappedBy = "investment", cascade = CascadeType.ALL)
     private ServiceWallet serviceWallet;
     @OneToMany(mappedBy = "investment", cascade = CascadeType.ALL)

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.swd392.funfundbe.controller.api.exception.custom.CustomBadRequestException;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,16 +26,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface InvestmentController {
     @Operation(summary = "Get all investment current user invested")
     @GetMapping("/")
-    public ResponseEntity<List<InvestedProjectResponse>> getAllInvestmentOfCurrentUser() throws CustomNotFoundException;
+    public ResponseEntity<List<InvestedProjectResponse>> getAllInvestmentOfCurrentUser() throws CustomNotFoundException, CustomForbiddenException;
 
-    @Operation(summary = "invest a project with current user")
+    @Operation(summary = "Invest a project with current user")
     @PostMapping("/invest")
-    public ResponseEntity<InvestedProjectResponse> investProject(@RequestBody InvestProjectRequest request)
+    public ResponseEntity<InvestedProjectResponse> investProject(@RequestBody @Valid InvestProjectRequest request)
             throws CustomNotFoundException, CustomForbiddenException, CustomBadRequestException;
 
     @Operation(summary = "cancel a project")
     @PutMapping("{id}/cancel")
-    public ResponseEntity<InvestedProjectResponse> cancelProject(@PathVariable("id") UUID id)
+    public ResponseEntity<?> cancelProject(@PathVariable("id") UUID id)
             throws CustomForbiddenException, CustomNotFoundException;
 
 }

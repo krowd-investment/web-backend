@@ -69,24 +69,19 @@ public class ObjectMapper {
     }
 
     public static InvestedProjectResponse fromInvestmentToInvestedResponse(Investment investment) {
-        return InvestedProjectResponse.builder().projectId(investment.getProject().getProjectId())
-                .projectName(investment.getProject().getProjectName())
-                .mulplier(investment.getProject().getMultiplier())
-                .image(investment.getProject().getImage())
-                .totalMoney(investment.getTotalMoney())
-                .createAt(investment.getCreatedAt())
-                .updateAt(investment.getUpdatedAt())
-                .status(investment.getStatus())
-                .duration(investment.getProject().getDuration())
-                .userId(investment.getInvestmentUser().getUserId())
-                .build();
-    }
-
-    public static Investment fromInvestmentRequestToInvestment(InvestProjectRequest request) {
-        return Investment.builder().createdAt(request.getCreateAt()).totalMoney(request.getTotalMoney())
-                .updatedAt(request.getCreateAt())
-                .contract("")
-                .status(request.getStatus()).build();
+        return investment == null ? null :
+                InvestedProjectResponse.builder()
+                        .investmentId(investment.getInvestmentId())
+                        .projectId(investment.getProject().getProjectId())
+                        .projectName(investment.getProject().getProjectName())
+                        .mulplier(investment.getProject().getMultiplier())
+                        .image(investment.getProject().getImage())
+                        .totalMoney(investment.getTotalMoney())
+                        .createAt(investment.getCreatedAt())
+                        .updateAt(investment.getUpdatedAt())
+                        .status(investment.getStatus())
+                        .shareAmount(investment.getShareAmount())
+                        .build();
     }
 
     public static FieldResponse fromFieldToFieldResponse(Field field) {
