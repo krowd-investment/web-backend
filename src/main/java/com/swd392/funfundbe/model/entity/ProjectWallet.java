@@ -43,6 +43,4 @@ public class ProjectWallet {
 
     @Column(name = "status", nullable = false)
     private boolean status;
-    @OneToMany(mappedBy = "projectWallet", cascade = CascadeType.ALL)
-    private List<InvestmentTransaction> investmentTransactionCreatedByList;
 }

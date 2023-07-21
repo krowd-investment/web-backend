@@ -67,8 +67,6 @@ public class Project {
     @Column(name = "status")
     private String status;
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<Risk> riskList;
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Investment> investmentList;
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Stage> stageList;

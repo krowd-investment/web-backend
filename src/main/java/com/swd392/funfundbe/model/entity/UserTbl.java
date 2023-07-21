@@ -51,26 +51,4 @@ public class UserTbl {
     private ProjectOwner projectOwner;
     @OneToMany(mappedBy = "personalwalletOf", cascade = CascadeType.ALL)
     private List<PersonalWallet> personalWallet;
-    @OneToMany(mappedBy = "projectCreatedBy", cascade = CascadeType.ALL)
-    private List<Project> projectCreatedBy;
-    @OneToMany(mappedBy = "projectApprovedBy", cascade = CascadeType.ALL)
-    private List<Project> projectApprovedBy;
-    @OneToMany(mappedBy = "projectUpdatedBy", cascade = CascadeType.ALL)
-    private List<Project> projectUpdatedBy;
-    @OneToMany(mappedBy = "investmentUser", cascade = CascadeType.ALL)
-    private List<Investment> investmentsList;
-    @OneToMany(mappedBy = "reportCreatedBy", cascade = CascadeType.ALL)
-    private List<MonthlyReport> reportCreatedBy;
-    @OneToMany(mappedBy = "reportUpdatedBy", cascade = CascadeType.ALL)
-    private List<MonthlyReport> reportUpdatedBy;
-    @OneToMany(mappedBy = "pWTransactionrcreatedBy", cascade = CascadeType.ALL)
-    private List<PersonalWalletTransaction> personalTransactionCreatedByList;
-    @OneToMany(mappedBy = "serviceWalletTransactioncreatedBy", cascade = CascadeType.ALL)
-    private List<ServiceWalletTransaction> serviceTransactionCreatedByList;
-    @OneToMany(mappedBy = "investmentTransactioncreatedBy", cascade = CascadeType.ALL)
-    private List<InvestmentTransaction> investmentTransactionCreatedByList;
-    @OneToMany(mappedBy = "periodRevenueCreatedBy", cascade = CascadeType.ALL)
-    private List<PeriodRevenue> periodRevenueCreatedByList;
-    @OneToMany(mappedBy = "periodRevenueUpdatedBy", cascade = CascadeType.ALL)
-    private List<PeriodRevenue> periodRevenueUpdatedByList;
 }
