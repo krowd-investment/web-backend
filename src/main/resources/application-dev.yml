@@ -3,10 +3,15 @@ spring:
     import: env.yml
   datasource:
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://${DEV_DB_URL}:${DEV_DB_PORT};databaseName=krowdDemo;encrypt=true;trustServerCertificate=true
+    url: jdbc:sqlserver://${DEV_DB_URL}:${DEV_DB_PORT};databaseName=KrowdFunFund;encrypt=true;trustServerCertificate=true
     username: ${DEV_DB_USERNAME}
     password: ${DEV_DB_PASSWORD}
 
 server:
   error:
     include-message: always
+
+momo:
+  web-redirect-url: ${DEV_SERVER_DOMAIN}/api/payment/momo/result
+  mobile-redirect-url: mobile
+  ipn-url: ${DEV_SERVER_DOMAIN}/api/payment/momo/result
